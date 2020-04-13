@@ -11,13 +11,13 @@ class Camera:
         self.azimuth = azimuth
         self.zenith = zenith
         self.radius = radius
-        self.position = Vector(0.0, 0.0, 0.0)
+        self.position = position
         self.view_vector = Vector(0.0, 0.0, 0.0)
         self.up_vector = Vector(0.0, 0.0, 0.0)
 
         self.eye = self.position
         self.view_center = Vector(0.0, 0.0, 0.0)
-        self.compute()
+        self.set_matrix()
 
     def compute(self):
         self.view_vector = Vector(math.cos(self.azimuth) * math.cos(self.zenith),

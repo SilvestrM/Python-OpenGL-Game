@@ -3,8 +3,8 @@ from abc import ABC
 
 import pyglet
 from pyglet import window
-from pyglet.gl import *
-# from OpenGL.GL import *
+# from pyglet.gl import *
+from OpenGL.GL import *
 from pyglet.window import key, mouse
 
 
@@ -28,7 +28,7 @@ class AppWindow(pyglet.window.Window):
         self.fps_display.draw()
 
     def update(self, dt):
-        self.scene.update()
+        self.scene.update(dt)
         if self.keys[key.W]:
             self.scene.camera.move_forward(dt * self.scene.camera_speed)
         if self.keys[key.S]:
@@ -41,6 +41,8 @@ class AppWindow(pyglet.window.Window):
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
             self.close()
+        if symbol == key.SPACE:
+            self.scene.camera.jump()
         # if symbol == key.W:
         #     self.scene.camera.move_forward(self.scene.camera_speed)
         # if symbol == key.S:

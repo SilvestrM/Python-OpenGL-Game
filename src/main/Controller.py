@@ -9,14 +9,15 @@ from OpenGL.GLU import *
 from display.AppWindow import AppWindow
 from display.Renderer import Renderer
 from display.Scene import Scene
+from levels.Initial import Initial
 
 
 class Controller:
     def __init__(self):
         # pygame.init()
         self.win_size = (1280, 920)
-
-        self.scene = Scene(self.win_size)
+        level1 = Initial()
+        self.scene = Scene(self.win_size, level1)
         self.renderer = Renderer(self.scene)
         self.win = AppWindow(self.renderer, self.scene)
         # self.win = pygame.display.set_mode(self.win_size)
