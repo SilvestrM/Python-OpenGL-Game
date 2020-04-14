@@ -15,6 +15,8 @@ class AppWindow(pyglet.window.Window):
         self.scene = scene
         self.keys = key.KeyStateHandler()
         self.set_exclusive_mouse()
+        self.set_location(300, 20)
+
         self.push_handlers(self.keys)
         self.fps_display = window.FPSDisplay(self)
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
@@ -29,6 +31,13 @@ class AppWindow(pyglet.window.Window):
 
     def update(self, dt):
         self.scene.update(dt)
+        for solid in self.scene.solids:
+            collides = solid.collides(self.scene.camera)
+            if collides:
+                print(collides)
+                collides_dir = solid.collides_with(self.scene.camera)
+                print(collides_dir)
+
         if self.keys[key.W]:
             self.scene.camera.move_forward(dt * self.scene.camera_speed)
         if self.keys[key.S]:
@@ -60,12 +69,12 @@ class AppWindow(pyglet.window.Window):
     #             self.scene.cam_y = y
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.scene.camera.addAzimuth((math.radians(0.1) * (-dx)))
-        self.scene.camera.addZenith((math.radians(0.1) * (dy)))
+        self.scene.camera.add_azimuth((math.radians(0.1) * (-dx)))
+        self.scene.camera.add_zenith((math.radians(0.1) * (dy)))
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         if buttons == mouse.LEFT:
-            self.scene.camera.addAzimuth((math.radians(0.3) * (self.scene.cam_x - x)))
-            self.scene.camera.addZenith((math.radians(0.3) * (self.scene.cam_y - y)))
+            self.scene.camera.add_azimuth((math.radians(0.3) * (self.scene.cam_x - x)))
+            self.scene.camera.add_zenith((math.radians(0.3) * (self.scene.cam_y - y)))
             self.scene.cam_x = x
             self.scene.cam_y = y

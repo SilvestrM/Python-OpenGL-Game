@@ -30,10 +30,10 @@ class Camera:
         self.eye = self.position
         self.view_center = self.eye.add(self.view_vector.multi_d(self.radius))
 
-    def addAzimuth(self, ang):
+    def add_azimuth(self, ang):
         self.azimuth += ang
 
-    def addZenith(self, ang):
+    def add_zenith(self, ang):
         # self.zenith += ang
         self.zenith = max(-math.pi / 2, min(self.zenith + ang, math.pi / 2))
 
@@ -45,7 +45,7 @@ class Camera:
 
         self.position = self.position.add(self.view_vector.multi_d(spd))
 
-        print(self.position.x, self.position.y, self.position.z)
+        print(self.view_vector.to_string())
 
     def move_backward(self, spd):
         self.move_forward(-spd)

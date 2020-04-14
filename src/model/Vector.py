@@ -13,4 +13,5 @@ class Vector:
     def multi_d(self, v):
         return Vector(self.x * v, self.y * v, self.z * v)
 
-
+    def to_string(self):
+        return str.format(str(self.x) + str(self.y) + str(self.z))

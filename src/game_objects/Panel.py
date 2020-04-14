@@ -5,7 +5,7 @@ from model.Vector import Vector
 
 
 class Panel(Solid):
-    def __init__(self, color, texture):
+    def __init__(self, color, texture=""):
         super().__init__(color, texture)
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 

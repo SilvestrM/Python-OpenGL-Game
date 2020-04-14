@@ -6,9 +6,10 @@ from model.Vector import Vector
 
 class Initial(Level):
     def __init__(self):
-        texture1 = 'brokenBricks.jpg'
-        texture2 = 'dirt1.jpg'
+        texture2 = 'stoneWall1.jpg'
+        texture1 = 'dirt1.jpg'
         texture3 = 'woodenWall1.jpg'
+        texture_ceil = 'darkstone1.jpg'
 
         cube1 = Cube([1.0, 0, 0], texture1)
         cube1.set_position(Vector(0, -2, -9))
@@ -40,6 +41,22 @@ class Initial(Level):
                 self.solids.append(panel1)
                 j += 2
             i += 2
+
+        # i = -max
+        # while True:
+        #     if i >= max: break
+        #     j = -max
+        #     while True:
+        #         if j >= max: break
+        #         panel1 = Panel([0.05, 0.05, 0.05], texture3)
+        #         panel1.set_position(Vector(i, j, -1), 180, Vector(0, 1, 0))
+        #         self.solids.append(panel1)
+        #         j += 2
+        #     i += 2
+
+        # panelc = Panel([1.0, 0.5, 0], texture_ceil)
+        # panelc.set_position(Vector(0, 0, -1), 180, Vector(0, 1, 0), Vector(20,20,0))
+        # self.solids.append(panelc)
 
         wall1 = Panel([1.0, 0.5, 0], texture2)
         wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))

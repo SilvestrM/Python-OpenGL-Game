@@ -12,10 +12,13 @@ class Cube(Solid):
         super().__init__(color, texture)
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 
-        colors = ('c3b', [color[0], color[1], color[2]] * 4)
+        self.bounding_box = 2
 
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1)),
-                       texture_coords)  # bottom
+
+        colors = ('c3f', [color[0], color[1], color[2]] * 4)
+
+        vertices = ('v3f', (1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1))
+        self.batch.add(4, GL_QUADS, self.texture, vertices, colors, texture_coords)  # bottom
         self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1)),
                        texture_coords)  # top
         self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1,)),
@@ -45,6 +48,13 @@ class Cube(Solid):
     #     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
     #     return texture
     #     # self.model = glMultMatrixf(self.model)
+
+    def draw(self):
+        glDisable(GL_TEXTURE_2D)
+        glColor3f(self.color[0], self.color[1], self.color[2])
+        self.draw_box()
+        super().draw()
+
 
     # def draw(self):
     #

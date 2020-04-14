@@ -4,6 +4,8 @@ from OpenGL.GL import *
 
 import pygame
 
+from model.Vector import Vector
+
 
 def load_texture(path):
     textureSurface = pygame.image.load(path)
@@ -33,7 +35,8 @@ def bind_texture(texture):
     glBindTexture(GL_TEXTURE_2D, texture)
 
 
-def distance(point_1=(0, 0), point_2=(0, 0)):
+def distance(vec1: Vector, vec2: Vector):
     return math.sqrt(
-        (point_1[0] - point_2[0]) ** 2 +
-        (point_1[1] - point_2[1]) ** 2)
+        (vec1.x - vec2.x) ** 2 +
+        (vec1.y - vec2.y) ** 2 +
+        (vec1.z - vec2.z) ** 2)
