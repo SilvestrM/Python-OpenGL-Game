@@ -3,20 +3,19 @@ from model.Collidable import Collidable
 from model.Vector import Vector
 
 
-class Player(Camera, Collidable):
+class Player(Camera):
     def __init__(self, mass, position: Vector, azimuth, zenith, radius: float):
         super().__init__(position, azimuth, zenith, radius)
 
-        self.bounding_box = 0.5
+        self.bounding_box = Vector(0.5, 0.5, 0.5)
 
+        self.min_x, self.min_y, self.min_z = self.position.x - 0.5, self.position.y - 0.5, self.position.z
+        self.max_x, self.max_y, self.max_z = self.min_x + 1, self.min_y + 1, self.min_z + 1
+
+        self.padding = 0.25
         self.velo = 0
         self.mass = mass
         self.is_jumping = False
-
-        #
-    def collides_to(self):
-        pass
-
 
     def jump(self):
         self.velo = 0.2

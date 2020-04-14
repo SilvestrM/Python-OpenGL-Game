@@ -37,7 +37,7 @@ class Initial(Level):
             while True:
                 if j >= max: break
                 panel1 = Panel([1.0, 0.5, 0], texture1)
-                panel1.set_position(Vector(i, j, -1))
+                panel1.set_position(Vector(i, j, 0))
                 self.solids.append(panel1)
                 j += 2
             i += 2
@@ -93,6 +93,9 @@ class Initial(Level):
         self.solids.append(cubeWall)
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(-10, 2, 0))
+        self.solids.append(cubeWall)
+        cubeWall = Cube([0, 1.0, 0], texture2)
+        cubeWall.set_position(Vector(-12, 2, 0))
         self.solids.append(cubeWall)
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(-12, 0, 0))

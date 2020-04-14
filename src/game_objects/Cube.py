@@ -1,6 +1,7 @@
 from OpenGL.GL import *
-# from pyglet.gl import *
+import pyglet.gl
 
+from model.Collidable import Collidable
 from model.Solid import Solid
 from model.Vector import Vector
 import pyglet.graphics
@@ -12,49 +13,64 @@ class Cube(Solid):
         super().__init__(color, texture)
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 
-        self.bounding_box = 2
-
-
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
+        size = 1
+        self.size = size
 
-        vertices = ('v3f', (1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1))
-        self.batch.add(4, GL_QUADS, self.texture, vertices, colors, texture_coords)  # bottom
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1)),
+        self.vertices = [
+            [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
+            [0, size, size]]
+        self.bounding_box = self.vertices
+
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (size, 0, 0, 0, 0, 0, 0, size, 0, size, size, 0)), colors,
+                       texture_coords)  # bottom
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (0, 0, size, size, 0, size, size, size, size, 0, size, size)),
                        texture_coords)  # top
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1,)),
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (0, 0, size, 0, size, size, 0, size, 0, 0, 0, 0,)),
                        texture_coords)  # left
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1,)),
+        self.batch.add(4, GL_QUADS, self.texture,
+                       ('v3f', (size, 0, 0, size, size, 0, size, size, size, size, 0, size,)),
                        texture_coords)  # right
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1)),
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (0, 0, 0, size, 0, 0, size, 0, size, 0, 0, size)),
                        texture_coords)  # back
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1, -1)),
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (0, size, size, size, size, size, size, size, 0, 0, size, 0)),
                        texture_coords)  # front
 
-        # colors = ('c3b', [color[0], color[1], color[2]] * 8)
-        # # texture = ('c3b', [color.x, color.y, color.z] * 8)
-        # self.batch.add(8, GL_QUADS, ('v3f', [1, 1, 1,
-        #                                      1, 1, -1,
-        #                                      1, -1, -1,
-        #                                      1, -1, 1,
-        #                                      -1, 1, 1,
-        #                                      -1, -1, -1,
-        #                                      -1, -1, 1,
-        #                                      -1, 1, -1]), colors)
+        self.min_x, self.min_y, self.min_z = self.position.x, self.position.y, self.position.z
+        self.max_x, self.max_y, self.max_z = self.min_x + 2, self.min_y + 2, self.min_z + 2
 
-    # def get_texture(self, file):
-    #     texture = super().get_texture(file)
-    #     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    #     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    #     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
-    #     return texture
-    #     # self.model = glMultMatrixf(self.model)
+        # box_faces = (
+        #     [max_x, min_y, min_z, min_x, min_y, min_z, min_x, max_y, min_z, max_x, max_y, min_z],
+        #     [min_x, min_y, max_z, max_x, min_y, max_z, max_x, max_y, max_z, min_x, max_y, max_z],
+        #     [min_x, min_y, max_z, min_x, max_y, max_z, min_x, max_y, min_z, min_x, min_y, min_z],
+        #     [max_x, min_y, min_z, max_x, max_y, min_z, max_x, max_y, max_z, max_x, min_y, max_z],
+        #     [min_x, min_y, min_z, max_x, min_y, min_z, max_x, min_y, max_z, min_x, min_y, max_z],
+        #     [min_x, max_y, max_z, max_x, max_y, max_z, max_x, max_y, min_z, min_x, max_y, min_z]
+        # )
+
+    def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
+                     scale=Vector(1.0, 1.0, 1.0)):
+        super().set_position(translate, rotate_angle, rotate, scale)
+        self.min_x, self.min_y, self.min_z = translate.x, translate.y, translate.z
+        self.max_x, self.max_y, self.max_z = self.min_x + self.size, self.min_y + self.size, self.min_z + self.size
+        for i, vertex in enumerate(self.bounding_box):
+            multi = Vector(vertex[0], vertex[1], vertex[2]).multi_m(self.model)
+            self.bounding_box[i] = [multi.x, multi.y, multi.z]
+
 
     def draw(self):
-        glDisable(GL_TEXTURE_2D)
-        glColor3f(self.color[0], self.color[1], self.color[2])
-        self.draw_box()
+        # glDisable(GL_TEXTURE_2D)
+        # glColor3f(self.color[0], self.color[1], self.color[2])
+        # self.draw_box()
+        # for i, vertex in enumerate(self.bounding_box):
+        #     multi = Vector(vertex[0], vertex[1], vertex[2]).multi_m(self.model)
+        #     self.bounding_box[i] = [multi.x, multi.y, multi.z]
+        # print(self.bounding_box)
+        # for i, vertex in enumerate(self.bounding_box):
+        #     multi = Vector(vertex[0], vertex[1], vertex[2]).multi_m(self.model)
+        #     self.bounding_box[i] = [multi.x, multi.y, multi.z]
+        # print(self.max_x)
         super().draw()
-
 
     # def draw(self):
     #

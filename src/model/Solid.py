@@ -8,13 +8,14 @@ from model.Collidable import Collidable
 from model.Vector import Vector
 
 
-class Solid(Collidable):
+class Solid:
     model = [0, 0, 0, 0,
              0, 0, 0, 0,
              0, 0, 0, 0,
              0, 0, 0, 0]
     # model = (GLfloat * len(pymodel))(*pymodel
     color = []
+    position = Vector(0, 0, 0)
 
     def __init__(self, color, texture):
         super().__init__()

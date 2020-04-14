@@ -24,14 +24,14 @@ class Scene:
         texture3 = 'woodenWall1.jpg'
 
         # self.camera = Camera(Vector(25, 0.0, 0.0), 90, -20, 1)
-        self.camera = Player(0.5, Vector(4, 0, 0.0), 60, 0, 1)
+        self.camera = Player(0.5, Vector(4, 0, 0.7), 0, 0, 1)
 
         # gluPerspective(90, (self.win_size[0] / self.win_size[1]), 0.1, 50.0)
 
         self.axes = Axes()
 
     def update(self, dt):
-        if self.camera.position.z > 0 and not self.camera.is_jumping:
+        if self.camera.position.z > 0.7 and not self.camera.is_jumping:
             self.camera.position.z -= dt * self.camera.mass
         # elif self.camera.position.z < 0.5 and not self.camera.is_jumping:
         #     self.camera.position.z += dt * self.camera_speed

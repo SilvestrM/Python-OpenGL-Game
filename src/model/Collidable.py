@@ -8,7 +8,7 @@ from utils import Utils
 
 
 class Collidable:
-    min_x, min_y, min_z = -1, -1, -1
+    min_x, min_y, min_z = 0, 0, 0
     max_x, max_y, max_z = min_x + 2, min_y + 2, min_z + 2
 
     box_faces = (
@@ -21,7 +21,6 @@ class Collidable:
     )
 
     position: Vector
-    bounding_box: float = 0
 
     def __init__(self):
         pass
@@ -32,6 +31,11 @@ class Collidable:
     def insersects_point(self, point, box):
         return (box.minX <= point.x <= box.maxX) and (box.minY <= point.y <= box.maxY) and (
                 box.minZ <= point.z <= box.maxZ)
+
+    def collision(self, other):
+        col_x = self.position.x + self.bounding_box.x >= other.position.x and other.position.x >= self.position.x
+        col_y = self.position.y + self.bounding_box.y >= other.position.y and other.position.y >= self.position.y
+        return col_x and col_y
 
     def collides_with(self, other_object):
         collision = self.bounding_box / 2 + other_object.bounding_box / 2

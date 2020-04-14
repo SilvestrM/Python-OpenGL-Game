@@ -40,12 +40,17 @@ class Camera:
     def move_forward(self, spd):
         # self.position = self.position.add(
         #     Vector(math.sin(self.azimuth) * math.cos(self.zenith),
-        #            math.sin(self.zenith),
-        #            -math.cos(self.azimuth) * math.cos(self.zenith)).multi_d(spd))
+        #            math.sin(self.zenith) * math.cos(self.azimuth),
+        #            math.sin(self.zenith)).multi_d(spd))
 
         self.position = self.position.add(self.view_vector.multi_d(spd))
 
-        print(self.view_vector.to_string())
+
+    def get_direction(self):
+        x = self.azimuth
+        y = self.view_vector.y
+        z = self.view_vector.z
+
 
     def move_backward(self, spd):
         self.move_forward(-spd)

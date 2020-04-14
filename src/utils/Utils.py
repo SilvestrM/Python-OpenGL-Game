@@ -35,8 +35,26 @@ def bind_texture(texture):
     glBindTexture(GL_TEXTURE_2D, texture)
 
 
+def insersects_point(point, box):
+    return (box.min_x <= point.x <= box.max_x) and \
+           (box.min_y <= point.y <= box.max_y) and \
+           (box.min_z <= point.z <= box.max_z)
+
+
+def intersect(a, b):
+    return (a.minX <= b.maxX and a.maxX >= b.minX) and \
+           (a.minY <= b.maxY and a.maxY >= b.minY) and \
+           (a.minZ <= b.maxZ and a.maxZ >= b.minZ)
+
+
 def distance(vec1: Vector, vec2: Vector):
     return math.sqrt(
         (vec1.x - vec2.x) ** 2 +
         (vec1.y - vec2.y) ** 2 +
         (vec1.z - vec2.z) ** 2)
+
+
+def get_collision_dir(point, box):
+    if box.min_x <= point.x <= box.max_x: return "x"
+    if box.min_y <= point.y <= box.max_y: return "y"
+    if box.min_z <= point.z <= box.max_z: return "z"
