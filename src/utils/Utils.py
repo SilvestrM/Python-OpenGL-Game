@@ -35,10 +35,10 @@ def bind_texture(texture):
     glBindTexture(GL_TEXTURE_2D, texture)
 
 
-def insersects_point(point, box):
-    return (box.min_x <= point.x <= box.max_x) and \
-           (box.min_y <= point.y <= box.max_y) and \
-           (box.min_z <= point.z <= box.max_z)
+def insersects_point(point, box, padding):
+    return ((box.min_x - padding) <= point.x <= (box.max_x + padding)) and \
+           ((box.min_y - padding) <= point.y <= (box.max_y + padding)) and \
+           ((box.min_z - padding) <= point.z <= (box.max_z + padding))
 
 
 def intersect(a, b):

@@ -7,6 +7,9 @@ class Vector:
     def add(self, v):
         return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
 
+    def sub(self, v):
+        return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+
     def multi_v(self, v: super):
         return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
 

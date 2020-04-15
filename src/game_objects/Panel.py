@@ -9,12 +9,12 @@ class Panel(Solid):
         super().__init__(color, texture)
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 
-        size = 2
+        size = 1
         self.bounding_box = Vector(size, size, 0)
 
         colors = ('c3b', [color[0], color[1], color[2]] * 4)
 
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (0, 0, 0, size, 0, 0, size, size, 0, 0, size, 0)),
+        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
                        texture_coords)  # front
         # self.batch.add(4, GL_QUADS, self.texture, ('v3f', (1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1)),
         #                texture_coords)  # bottom
