@@ -67,10 +67,6 @@ class Cube(Solid):
 
         self.bounding_box = BoundingBox(self.position, scale.x, scale.y, scale.z)
 
-        # for i, vertex in enumerate(self.bounding_box):
-        #     multi = Vector(vertex[0], vertex[1], vertex[2]).multi_m(self.model)
-        #     self.bounding_box[i] = [multi.x, multi.y, multi.z]
-
     # def draw(self):
     #
     #     # glEnable(GL_TEXTURE_2D)

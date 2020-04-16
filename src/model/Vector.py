@@ -7,8 +7,17 @@ class Vector:
     def add(self, v):
         return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
 
+    def __add__(self, v):
+        return Vector(self.x + v, self.y + v, self.z + v)
+
     def sub(self, v):
         return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+
+    def __sub__(self, v: float or int):
+        return Vector(self.x - v, self.y - v, self.z - v)
+
+    def __sub__(self, v: float or int):
+        return Vector(self.x - v, self.y - v, self.z - v)
 
     def multi_v(self, v: super):
         return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
