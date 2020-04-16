@@ -33,7 +33,7 @@ class Renderer:
         glPushMatrix()
 
         # camera
-        self.scene.camera.set_matrix()
+        self.scene.player.set_matrix()
 
         glDisable(GL_TEXTURE_2D)
         glEnable(GL_LINE_SMOOTH)
@@ -52,7 +52,7 @@ class Renderer:
         for solid in self.scene.solids:
             glPushMatrix()
             # camera
-            self.scene.camera.set_matrix()
+            self.scene.player.set_matrix()
             self.render(solid)
             glMatrixMode(GL_MODELVIEW)
             glPopMatrix()

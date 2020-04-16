@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 import pyglet.gl
 
+from model.BoundingBox import BoundingBox
 from model.Collidable import Collidable
 from model.Solid import Solid
 from model.Vector import Vector
@@ -17,6 +18,7 @@ class Cube(Solid):
         size = 1
         self.size = size
         self.center_dist = 0
+        self.bounding_box = BoundingBox(self.position, size, size, size)
 
         self.vertices = [
             [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
@@ -46,6 +48,8 @@ class Cube(Solid):
         self.min_x, self.min_y, self.min_z = self.position.x - size, self.position.y - size, self.position.z - size
         self.max_x, self.max_y, self.max_z = self.position.x + size, self.position.y + size, self.position.z + size
 
+
+
         # box_faces = (
         #     [max_x, min_y, min_z, min_x, min_y, min_z, min_x, max_y, min_z, max_x, max_y, min_z],
         #     [min_x, min_y, max_z, max_x, min_y, max_z, max_x, max_y, max_z, min_x, max_y, max_z],
@@ -60,7 +64,8 @@ class Cube(Solid):
         super().set_position(translate, rotate_angle, rotate, scale)
         self.min_x, self.min_y, self.min_z = translate.x - self.size, translate.y - self.size, translate.z - self.size
         self.max_x, self.max_y, self.max_z = translate.x + self.size, translate.y + self.size, translate.z + self.size
-        print(self.max_x)
+
+        self.bounding_box = BoundingBox(self.position, scale.x, scale.y, scale.z)
 
         # for i, vertex in enumerate(self.bounding_box):
         #     multi = Vector(vertex[0], vertex[1], vertex[2]).multi_m(self.model)
