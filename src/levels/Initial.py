@@ -58,6 +58,23 @@ class Initial(Level):
         # panelc.set_position(Vector(0, 0, -1), 180, Vector(0, 1, 0), Vector(20,20,0))
         # self.solids.append(panelc)
 
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(6, 8, 0))
+        self.solids.append(cubeWall)
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(4, 8, 0))
+        self.solids.append(cubeWall)
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(6, 10, 0))
+        self.solids.append(cubeWall)
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(4, 10, 0))
+        self.solids.append(cubeWall)
+
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(-2, 10, 0))
+        self.solids.append(cubeWall)
+
         wall1 = Panel([1.0, 0.5, 0], texture2)
         wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))
         self.solids.append(wall1)

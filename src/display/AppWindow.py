@@ -75,7 +75,8 @@ class AppWindow(pyglet.window.Window):
                         collided_object = solid
                         break
         if collides:
-            center_dist = self.scene.camera.position.add(Vector(padding, padding, padding)).sub(collided_object.position)
+            center_dist = self.scene.camera.position.add(Vector(padding, padding, padding)).sub(
+                collided_object.position)
 
             dist_min_x = math.fabs(self.scene.camera.position.x + padding - collided_object.min_x)
             dist_max_x = math.fabs(self.scene.camera.position.x + padding - collided_object.max_x)
@@ -84,17 +85,36 @@ class AppWindow(pyglet.window.Window):
             dist_min_z = math.fabs(self.scene.camera.position.z - collided_object.min_z)
             dist_max_z = math.fabs(self.scene.camera.position.z - collided_object.max_z)
 
-            print("nX", dist_min_x, "-", dist_min_x - math.fabs(center_dist.x))
-            print("xX", dist_max_x, "-", dist_max_x - math.fabs(center_dist.x))
-            print("nY", dist_min_y, "-", dist_min_y - math.fabs(center_dist.y))
-            print("xY", dist_max_y, "-", dist_max_y - math.fabs(center_dist.y))
-            print("nZ", dist_min_z, "-", dist_max_y - math.fabs(center_dist.z))
-            print("xZ", dist_max_z, "-", dist_max_y - math.fabs(center_dist.z))
-            print("center", center_dist.to_string())
-
             distances = [dist_min_x - math.fabs(center_dist.x), dist_max_x - math.fabs(center_dist.x),
                          dist_min_y - math.fabs(center_dist.y), dist_max_y - math.fabs(center_dist.y),
-                         dist_min_y - math.fabs(center_dist.z), dist_max_y - math.fabs(center_dist.z)]
+                         dist_min_z - math.fabs(center_dist.z), dist_max_z - math.fabs(center_dist.z)]
+
+            print("nX", dist_min_x, "-", distances[0])
+            print("xX", dist_max_x, "-", distances[1])
+            print("nY", dist_min_y, "-", distances[2])
+            print("xY", dist_max_y, "-", distances[3])
+            print("nZ", dist_min_z, "-", distances[4])
+            print("xZ", dist_max_z, "-", distances[5])
+            print("center", center_dist.to_string())
+            # # min x min y
+            # if distances[0] == distances[2]:
+            #     self.scene.camera.position.x = collided_object.min_x - padding
+            #     self.scene.camera.position.y = collided_object.min_y - padding
+            #
+            # # min x max y
+            # elif distances[0] == distances[3]:
+            #     self.scene.camera.position.x = collided_object.min_x - padding
+            #     self.scene.camera.position.y = collided_object.max_y + padding
+            #
+            # # max x min y
+            # elif distances[1] == distances[2]:
+            #     self.scene.camera.position.x = collided_object.max_x + padding
+            #     self.scene.camera.position.y = collided_object.min_y - padding
+            #
+            # # max x max y
+            # elif distances[1] == distances[3]:
+            #     self.scene.camera.position.x = collided_object.max_x + padding
+            #     self.scene.camera.position.y = collided_object.max_y + padding
 
             minimum = min(range(len(distances)), key=distances.__getitem__)
             # while True:
@@ -104,36 +124,52 @@ class AppWindow(pyglet.window.Window):
             print("min", minimum)
             # if din
 
+            # min x
             if minimum == 0:
-                self.scene.camera.position.x = collided_object.min_x - padding
+                if distances[0] == distances[2] and not distances[0] == distances[3]:
+                    self.scene.camera.position.y = collided_object.min_y - padding
+                    self.scene.camera.position.x = collided_object.min_x - padding
+                elif distances[0] == distances[3] and not distances[0] == distances[2]:
+                    self.scene.camera.position.x = collided_object.min_x - padding
+                    self.scene.camera.position.y = collided_object.max_y + padding
+                else:
+                    self.scene.camera.position.x = collided_object.min_x - padding
+            # max x
             if minimum == 1:
-                self.scene.camera.position.x = collided_object.max_x + padding
+                if distances[1] == distances[2] and not distances[1] == distances[3]:
+                    self.scene.camera.position.x = collided_object.max_x + padding
+                    self.scene.camera.position.y = collided_object.min_y - padding
+                elif distances[1] == distances[3] and not distances[1] == distances[2]:
+                    self.scene.camera.position.x = collided_object.max_x + padding
+                    self.scene.camera.position.y = collided_object.max_y + padding
+                else:
+                    self.scene.camera.position.x = collided_object.max_x + padding
+
+            # min y
             if minimum == 2:
-                self.scene.camera.position.y = collided_object.min_y - padding
+                if distances[0] == distances[2] and not distances[1] == distances[2]:
+                    self.scene.camera.position.x = collided_object.min_x - padding
+                    self.scene.camera.position.y = collided_object.min_y - padding
+                elif distances[1] == distances[2] and not distances[0] == distances[2]:
+                    self.scene.camera.position.x = collided_object.max_x + padding
+                    self.scene.camera.position.y = collided_object.min_y - padding
+                else:
+                    self.scene.camera.position.y = collided_object.min_y - padding
+
+            # max y
             if minimum == 3:
-                self.scene.camera.position.y = collided_object.max_y + padding
+                if distances[0] == distances[3] and not distances[1] == distances[3]:
+                    self.scene.camera.position.y = collided_object.max_y + padding
+                    self.scene.camera.position.x = collided_object.min_x - padding
+                elif distances[1] == distances[3] and not distances[0] == distances[3]:
+                    self.scene.camera.position.y = collided_object.max_y + padding
+                    self.scene.camera.position.x = collided_object.max_x + padding
+                else:
+                    self.scene.camera.position.y = collided_object.max_y + padding
             if minimum == 4:
                 self.scene.camera.position.z = collided_object.min_z - padding
             if minimum == 5:
                 self.scene.camera.position.z = collided_object.max_z + padding
-            # if minimum == 0 or 1:
-            #     if dist_min_x < dist_max_x:
-            #         self.scene.camera.position.x = collided_object.min_x - padding  # - self.scene.camera.padding
-            #     if dist_max_x < dist_min_x:
-            #         self.scene.camera.position.x = collided_object.max_x + padding  # + self.scene.camera.padding
-            # # self.scene.camera.move_backward(dt * self.scene.camera_speed)
-            # # d = (p[i] - np[i]) * face[i]
-            # elif minimum == 2 or 3:
-            #     if dist_min_y < dist_max_y:
-            #         print("min y", collided_object.min_y)
-            #         self.scene.camera.position.y = collided_object.min_y - padding
-            #     if dist_max_y < dist_min_y:
-            #         self.scene.camera.position.y = collided_object.max_y + padding
-            # elif minimum == 4 or 5:
-            #     if dist_min_z < dist_max_z:
-            #         self.scene.camera.position.z = collided_object.min_z
-            #     if dist_max_z < dist_min_z:
-            #         self.scene.camera.position.z = collided_object.max_z + dt
 
         if self.scene.camera.position.z < 0:
             self.scene.camera.position.z = 0
