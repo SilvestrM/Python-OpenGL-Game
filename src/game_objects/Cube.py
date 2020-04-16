@@ -16,6 +16,7 @@ class Cube(Solid):
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
         size = 1
         self.size = size
+        self.center_dist = 0
 
         self.vertices = [
             [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
