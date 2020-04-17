@@ -1,5 +1,6 @@
 from game_objects.Cube import Cube
 from game_objects.Panel import Panel
+from game_objects.Skybox import Skybox
 from levels.Level import Level
 from model.Vector import Vector
 
@@ -11,12 +12,15 @@ class Initial(Level):
         texture3 = 'woodenWall1.jpg'
         texture_ceil = 'darkstone1.jpg'
 
+
+        self.skybox = Skybox("skybox1.png")
+
         cube1 = Cube([1.0, 0, 0], texture1)
         cube1.set_position(Vector(0, -2, -9))
 
         # panel1 = Panel([1.0, 0, 0], texture1)
         # panel1.set_position(Vector(0, 0, 0), Vector(2, 2, 0))
-
+        self.solids =[]
         self.solids.append(cube1)
         # self.solids.append(panel1)
 

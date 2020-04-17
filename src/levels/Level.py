@@ -1,3 +1,4 @@
 class Level:
-    solids = []
+    solids = [],
+    skybox = None
 

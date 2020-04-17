@@ -12,6 +12,7 @@ class Cube(Solid):
 
     def __init__(self, color: list, texture=""):
         super().__init__(color, texture)
+
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
@@ -45,10 +46,16 @@ class Cube(Solid):
                        ('v3f', (-size, size, size, size, size, size, size, size, -size, -size, size, -size)),
                        texture_coords)  # front
 
-        self.min_x, self.min_y, self.min_z = self.position.x - size, self.position.y - size, self.position.z - size
-        self.max_x, self.max_y, self.max_z = self.position.x + size, self.position.y + size, self.position.z + size
+        self.shader_source = ""
 
-
+        # shader = OpenGL.GL.shaders.compile
+        # glUseProgram(shader)
+        #
+        # vbo = GLuint(0)
+        # glGenBuffers(1, vbo)
+        #
+        # glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        # glBufferData(GL_ARRAY_BUFFER,500)
 
         # box_faces = (
         #     [max_x, min_y, min_z, min_x, min_y, min_z, min_x, max_y, min_z, max_x, max_y, min_z],
@@ -62,29 +69,4 @@ class Cube(Solid):
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):
         super().set_position(translate, rotate_angle, rotate, scale)
-        self.min_x, self.min_y, self.min_z = translate.x - self.size, translate.y - self.size, translate.z - self.size
-        self.max_x, self.max_y, self.max_z = translate.x + self.size, translate.y + self.size, translate.z + self.size
-
         self.bounding_box = BoundingBox(self.position, scale.x, scale.y, scale.z)
-
-    # def draw(self):
-    #
-    #     # glEnable(GL_TEXTURE_2D)
-    #     # glBindTexture(GL_TEXTURE_2D, self.texture)
-    #     self.batch.draw()
-    #     # pyglet.graphics.draw(6, GL_QUADS, self.batch)
-    #
-    #     # glColor3f(self.color[0], self.color[1], self.color[2])
-    #     # glBegin(GL_QUADS)
-    #     # # glDrawElements()
-    #     # i = 0
-    #     # for cubeQuad in self.cubeQuads:
-    #     #     glNormal3dv(self.normals[i])
-    #     #     glTexCoord2f(0, 0)
-    #     #     glTexCoord2f(1, 0)
-    #     #     glTexCoord2f(1, 1)
-    #     #     glTexCoord2f(0, 1)
-    #     #     for cubeVertex in cubeQuad:
-    #     #         glVertex3fv(self.cubeVertices[cubeVertex])
-    #     #     i += 1
-    #     # glEnd()

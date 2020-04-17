@@ -1,5 +1,6 @@
 import math
 
+import pyglet
 from OpenGL.GL import *
 
 import pygame
@@ -7,28 +8,82 @@ import pygame
 from model.Vector import Vector
 
 
-def load_texture(path):
-    textureSurface = pygame.image.load(path)
+def load_texture(file, cube=False):
+    if file:
+        texture = pyglet.image.load('../resources/' + file).get_texture()
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        return pyglet.graphics.TextureGroup(texture)
+    if cube:
+        texture = pyglet.image.load('../resources/' + file).get_texture()
+        tex_id = None
+        glGenTextures(1, tex_id)
+        glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
 
-    if not textureSurface:
-        return
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        return pyglet.graphics.TextureGroup(texture)
+    return pyglet.image.Texture.create(250, 250)
 
-    textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
-    width = textureSurface.get_width()
-    height = textureSurface.get_height()
 
-    texture = glGenTextures(1)
+def load_cubemap_texture(file):
+    tex_id = glGenTextures(1)
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
 
-    glBindTexture(GL_TEXTURE_2D, texture)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+    texture = None
+    image = pyglet.image.load('../resources/' + file)
 
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-    return texture
+    tex_top = image.get_region(256, 256, 256, 256).get_texture()
+    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_top)
+    tex_top = pyglet.image.Texture(tex_top.width, tex_top.height, GL_TEXTURE_CUBE_MAP, tex_id)
+    # tex_bot = image.get_region(256, 256, 256, 256).get_image_data()
+    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    #              tex_top)
+    # tex_top = image.get_region(256, 256, 256, 256).get_image_data()
+    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    #              tex_top)
+    #
+    # tex_top = image.get_region(256, 256, 256, 256).get_image_data()
+    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    #              tex_top)
+    #
+    # tex_top = image.get_region(256, 256, 256, 256).get_image_data()
+    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    #              tex_top)
+
+    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+    return pyglet.graphics.TextureGroup(tex_top)
+
+
+# def load_texture(path):
+#     textureSurface = pygame.image.load(path)
+#
+#     if not textureSurface:
+#         return
+#
+#     textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
+#     width = textureSurface.get_width()
+#     height = textureSurface.get_height()
+#
+#     texture = glGenTextures(1)
+#
+#     glBindTexture(GL_TEXTURE_2D, texture)
+#     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+#                  0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+#
+#     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+#     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+#     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+#     return texture
 
 
 def bind_texture(texture):

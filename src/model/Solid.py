@@ -6,6 +6,7 @@ import pyglet.gl
 
 from model.Collidable import Collidable
 from model.Vector import Vector
+from utils.Utils import load_texture
 
 
 class Solid:
@@ -21,17 +22,7 @@ class Solid:
         super().__init__()
         self.batch = pyglet.graphics.Batch()
         self.color = color
-        self.texture = self.load_texture(texture)
-
-    def load_texture(self, file):
-        if file:
-            texture = pyglet.image.load('../resources/' + file).get_texture()
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            return pyglet.graphics.TextureGroup(texture)
-        return pyglet.image.Texture.create(250, 250)
+        self.texture = load_texture(texture)
 
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):
@@ -59,3 +50,4 @@ class Solid:
         glEnable(GL_TEXTURE_2D)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
         self.batch.draw()
+        glDisable(GL_TEXTURE_2D)

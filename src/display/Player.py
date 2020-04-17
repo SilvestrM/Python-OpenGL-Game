@@ -11,33 +11,36 @@ class Player(Camera):
         self.max_x, self.max_y, self.max_z = self.min_x + 1, self.min_y + 1, self.min_z + 1
 
         self.padding = 0.25
-        self.velo = 0
+        self.acc = 0
         self.mass = mass
         self.is_jumping = False
+        self.G_constant = 1
+        self.r = self.position.z - 0
+        self.velo = 9.8
 
     def jump(self):
-        self.velo = 0.2
-        self.is_jumping = True
+        if not self.is_jumping:
+            self.velo = 10
+            self.is_jumping = True
+
+    def gravity(self):
+        g = -9.81
+        df = 0.5 * 0.1 * (self.velo * abs(self.velo))
+        da = df / self.mass
+        return g - da
 
     def update(self, dt):
+        if self.position.z > 0:
+            # self.position.z -= (9.8 * self.velo * dt) / self.mass
+            self.position.z = self.position.z + self.velo * dt + self.acc * (dt * dt * 0.5)
+            acc_n = self.gravity()
+            self.velo = self.velo + (self.acc + acc_n) * (dt * 0.5)
+            self.acc = acc_n
+
         if self.is_jumping:
             self.velo -= self.mass * dt
-            self.position.z += self.velo
-            print("test")
+            self.position.z += self.velo * dt
+            print(self.acc, self.velo, self.position.z)
 
-        # # Calculate force (F). F = 0.5 * mass * velocity^2.
-        # if self.velo > 0:
-        #     F = (0.5 * self.mass * (self.velo * self.velo))
-        # else:
-        #     F = -(0.5 * self.mass * (self.velo * self.velo))
-        #
-        # # Change position
-        # self.position.z = self.position.z - F
-        #
-        # # Change velocity
-        # self.position.z = self.position.z - 1
-
-        # If ground is reached, reset variables.
-        if self.position.z <= 0:
+        if self.velo <= self.acc:
             self.is_jumping = False
-            self.velo = 0

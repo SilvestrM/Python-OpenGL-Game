@@ -1,7 +1,7 @@
 import math
 
-import pyglet
 # from pyglet.gl import *
+import pyglet
 from OpenGL.GL import *
 from pyglet import window
 from pyglet.window import key, mouse
@@ -22,6 +22,7 @@ class AppWindow(pyglet.window.Window):
         glClearColor(0.1, 0.1, 0.1, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
+
 
     def on_draw(self):
         self.clear()

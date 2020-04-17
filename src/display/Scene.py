@@ -22,6 +22,7 @@ class Scene:
         self.prev = ''
 
         self.solids = level.solids
+        self.skybox = level.skybox
 
         self.size = size
         texture1 = 'brokenBricks.jpg'
@@ -29,7 +30,7 @@ class Scene:
         texture3 = 'woodenWall1.jpg'
 
         # self.camera = Camera(Vector(25, 0.0, 0.0), 90, -20, 1)
-        self.player = Player(0.5, Vector(4, 0, 0), 0, 0, 1)
+        self.player = Player(1, Vector(4, 0, 0), 0, 0, 1)
 
         # gluPerspective(90, (self.win_size[0] / self.win_size[1]), 0.1, 50.0)
 
