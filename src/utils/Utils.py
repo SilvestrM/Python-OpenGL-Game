@@ -31,15 +31,21 @@ def load_texture(file, cube=False):
 
 
 def load_cubemap_texture(file):
-    tex_id = glGenTextures(1)
-    glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
+    # tex_id = glGenTextures(1)
+    # glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
 
     texture = None
     image = pyglet.image.load('../resources/' + file)
 
-    tex_top = image.get_region(256, 256, 256, 256).get_texture()
+    tex_front = pyglet.graphics.TextureGroup(image.get_region(256, 256, 256, 256).get_texture())
+    tex_bottom = pyglet.graphics.TextureGroup(image.get_region(256, 0, 256, 256).get_texture())
+    tex_left = pyglet.graphics.TextureGroup(image.get_region(0, 256, 256, 256).get_texture())
+    tex_top = pyglet.graphics.TextureGroup(image.get_region(256, 512, 256, 256).get_texture())
+    tex_right = pyglet.graphics.TextureGroup(image.get_region(512, 256, 256, 256).get_texture())
+    tex_back = pyglet.graphics.TextureGroup(image.get_region(768, 256, 256, 256).get_texture())
+    textures = [tex_bottom, tex_top, tex_left, tex_right, tex_back, tex_front]
     # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_top)
-    tex_top = pyglet.image.Texture(tex_top.width, tex_top.height, GL_TEXTURE_CUBE_MAP, tex_id)
+    # tex_top = pyglet.image.Texture(tex_top.width, tex_top.height, GL_TEXTURE_CUBE_MAP, tex_id)
     # tex_bot = image.get_region(256, 256, 256, 256).get_image_data()
     # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
     #              tex_top)
@@ -55,11 +61,15 @@ def load_cubemap_texture(file):
     # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_top.width, tex_top.height, 0, GL_RGB, GL_UNSIGNED_BYTE,
     #              tex_top)
 
-    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-    return pyglet.graphics.TextureGroup(tex_top)
+    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+    glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    # glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    # glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+    return textures
 
 
 # def load_texture(path):
