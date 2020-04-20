@@ -26,49 +26,49 @@ class Skybox:
         normals = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (-1, 0, 0), (0, -1, 0), (0, 0, -1)]
         print(get_st(0,0,1))
 
-        self.batch.add(4, GL_QUADS, None,
-                       ('v3f', (size, -size, -size, -size, -size, -size, -size, size, -size, size, size, -size)),
+        self.bottom = pyglet.graphics.Batch().add(4, GL_QUADS, None,
+                       ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
                        ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
-                       ('t3f', (1, 1, -1,
+                       ('t3f', ( 1, 1, -1,
                                 -1, 1, -1,
                                 -1, -1, -1,
                                 1, -1, -1)))  # bottom
-        self.batch.add(4, GL_QUADS, None,
+        self.top = pyglet.graphics.Batch().add(4, GL_QUADS, None,
                        ('v3f', (-size, -size, size, size, -size, size, size, size, size, -size, size, size)),
                        ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
-                       ('t3f', (1, 1, 1,
-                                -1, 1, 1,
-                                -1, -1, 1,
-                                1, -1, 1)))  # top
-        self.batch.add(4, GL_QUADS, None,
-                       ('v3f', (-size, -size, size, -size, size, size, -size, size, -size, -size, -size, -size,)),
+                       ('t3f', (-1, -1, 1,
+                                1, -1, 1,
+                                1, 1, 1,
+                                -1, 1, 1)))  # top
+        self.left = pyglet.graphics.Batch().add(4, GL_QUADS, None,
+                       ('v3f', (-size, -size, -size, -size, size, -size, -size, size, size, -size, -size, size,)),
                        ('n3f', (-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0)),
-                       ('t3f', (-1, 1, 1,
-                                -1, -1, 1,
+                       ('t3f', (-1, -1, 1,
                                 -1, -1, -1,
-                                -1, 1, -1,)))  # left
-        self.batch.add(4, GL_QUADS, None,
+                                -1, 1, -1,
+                                -1, 1, 1,)))  # left
+        self.right = pyglet.graphics.Batch().add(4, GL_QUADS, None,
                        ('v3f', (size, -size, -size, size, size, -size, size, size, size, size, -size, size,)),
                        ('n3f', (1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0)),
-                       ('t3f', (1, 1, -1,
-                                1, 1, 1,
-                                1, -1, 1,
-                                1, -1, -1
+                       ('t3f', (1, -1, 1,
+                                1, -1, -1,
+                                1, 1, -1,
+                                1, 1, 1
                                 )))  # right
-        self.batch.add(4, GL_QUADS, None,
+        self.back = pyglet.graphics.Batch().add(4, GL_QUADS, None,
                        ('v3f', (-size, -size, -size, size, -size, -size, size, -size, size, -size, -size, size)),
                        ('n3f', (0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0)),
-                       ('t3f', (-1, -1, -1,
-                                1, -1, -1,
-                                1, -1, 1,
-                                -1, -1, 1)))  # back
-        self.batch.add(4, GL_QUADS, None,
+                       ('t3f', (-1, 1, 1,
+                                1, 1, 1,
+                                1, 1, -1,
+                                -1, 1, -1,)))  # back
+        self.front = pyglet.graphics.Batch().add(4, GL_QUADS, None,
                        ('v3f', (-size, size, size, size, size, size, size, size, -size, -size, size, -size)),
                        ('n3f', (0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)),
-                       ('t3f', (1, 1, 1,
-                                1, 1, -1,
-                                -1, 1, -1,
-                                -1, 1, 1)))  # front
+                       ('t3f', (1, -1, 1,
+                                -1, -1, 1,
+                                -1, -1, -1,
+                                1, -1,-1,)))  # front
 
     def draw(self):
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
@@ -88,12 +88,47 @@ class Skybox:
         # glEnable(GL_TEXTURE_GEN_T)
         # glEnable(GL_TEXTURE_GEN_R)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
-        # glMatrixMode(GL_TEXTURE)
-        # glPushMatrix()
-        # glLoadIdentity()
-        # glRotatef(90, 1, 0, 0)
+        glColor3f(0.93, 0.89, 0.57)
+        glMatrixMode(GL_TEXTURE)
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 0, 0, 1)
+        self.bottom.draw(GL_QUADS)
+        glPopMatrix()
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 0, 0, 1)
+        self.top.draw(GL_QUADS)
+        glPopMatrix()
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 1, 0, 0)
+        self.left.draw(GL_QUADS)
+        glPopMatrix()
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 1, 0, 0)
+        self.right.draw(GL_QUADS)
+        glPopMatrix()
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 0, 1, 0)
+        self.back.draw(GL_QUADS)
+        glPopMatrix()
+
+        glPushMatrix()
+        glLoadIdentity()
+        glRotatef(0, 0, 1, 0)
+        self.front.draw(GL_QUADS)
+        glPopMatrix()
+
+
         self.batch.draw()
-        # glPopMatrix()
         # glDisable(GL_TEXTURE_GEN_S)
         # glDisable(GL_TEXTURE_GEN_T)
         # glDisable(GL_TEXTURE_GEN_R)

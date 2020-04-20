@@ -8,7 +8,7 @@ from model.Vector import Vector
 class Panel(Solid):
     def __init__(self, color, texture=""):
         super().__init__(color, texture)
-        texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
+        texture_coords = ('t2f', (0, 0, 1, 0, 1, 1, 0, 1))
         size = 1
         self.bounding_box = BoundingBox(self.position, size, size, 0.01)
 
