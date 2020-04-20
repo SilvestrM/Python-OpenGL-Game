@@ -1,8 +1,11 @@
+import ctypes
+
+import numpy
 import pyglet
 
 from OpenGL.GL import *
 
-import pyglet.gl
+# from pyglet.gl import *
 
 from model.Collidable import Collidable
 from model.Vector import Vector
@@ -17,6 +20,7 @@ class Solid:
     # model = (GLfloat * len(pymodel))(*pymodel
     color = []
     position = Vector(0, 0, 0)
+    sizes = [1, 1, 1]
 
     def __init__(self, color, texture):
         super().__init__()
@@ -27,11 +31,12 @@ class Solid:
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):
         self.position = translate
+        self.sizes = [self.sizes[0] * scale.x, self.sizes[1] * scale.y, self.sizes[2] * scale.z]
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glScalef(scale.x, scale.y, scale.z)
-        glRotatef(rotate_angle, rotate.x, rotate.y, rotate.z)
         glTranslatef(translate.x, translate.y, translate.z)
+        glRotatef(rotate_angle, rotate.x, rotate.y, rotate.z)
+        glScalef(scale.x, scale.y, scale.z)
 
         self.model = glGetFloatv(GL_MODELVIEW_MATRIX, self.model)
 
@@ -48,6 +53,7 @@ class Solid:
         # glColor3f(self.color[0], self.color[1], self.color[2])
         # self.draw_box()
         glEnable(GL_TEXTURE_2D)
+        self.texture.set_state()
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
         self.batch.draw()
         glDisable(GL_TEXTURE_2D)

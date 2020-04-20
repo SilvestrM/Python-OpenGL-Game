@@ -12,7 +12,6 @@ class Initial(Level):
         texture3 = 'woodenWall1.jpg'
         texture_ceil = 'darkstone1.jpg'
 
-
         self.skybox = Skybox("skybox1.png")
 
         cube1 = Cube([1.0, 0, 0], texture1)
@@ -20,7 +19,7 @@ class Initial(Level):
 
         # panel1 = Panel([1.0, 0, 0], texture1)
         # panel1.set_position(Vector(0, 0, 0), Vector(2, 2, 0))
-        self.solids =[]
+        self.solids = []
         self.solids.append(cube1)
         # self.solids.append(panel1)
 
@@ -34,17 +33,11 @@ class Initial(Level):
         self.solids.append(cube3)
 
         max = 20
-        i = -max
-        while True:
-            if i >= max: break
-            j = -max
-            while True:
-                if j >= max: break
+        for i in range(-max, max, 2):
+            for j in range(-max, max, 2):
                 panel1 = Panel([1.0, 0.5, 0], texture1)
                 panel1.set_position(Vector(i, j, 0))
                 self.solids.append(panel1)
-                j += 2
-            i += 2
 
         # i = -max
         # while True:
@@ -62,6 +55,19 @@ class Initial(Level):
         # panelc.set_position(Vector(0, 0, -1), 180, Vector(0, 1, 0), Vector(20,20,0))
         # self.solids.append(panelc)
 
+        wall1 = Panel([1.0, 0.5, 0], texture2)
+        wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))
+        self.solids.append(wall1)
+        wall1 = Panel([1.0, 0.5, 0], texture2)
+        wall1.set_position(Vector(-3, 0, -2))
+        wall1.rotate(Vector(1, 0, 0), 90)
+        wall1.rotate(Vector(0, 1, 0), 180)
+        self.solids.append(wall1)
+        wall1 = Panel([1.0, 0.5, 0], texture3)
+        wall1.set_position(Vector(0, 4, 0), 90, Vector(0, 1, 0))
+        self.solids.append(wall1)
+
+        # Maze
         cubeWall = Cube([0, 1.0, 0], texture3)
         cubeWall.set_position(Vector(6, 8, 0))
         self.solids.append(cubeWall)
@@ -74,38 +80,21 @@ class Initial(Level):
         cubeWall = Cube([0, 1.0, 0], texture3)
         cubeWall.set_position(Vector(4, 10, 0))
         self.solids.append(cubeWall)
-
         cubeWall = Cube([0, 1.0, 0], texture3)
         cubeWall.set_position(Vector(-2, 10, 0))
         self.solids.append(cubeWall)
-
-        wall1 = Panel([1.0, 0.5, 0], texture2)
-        wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))
-        self.solids.append(wall1)
-        wall1 = Panel([1.0, 0.5, 0], texture2)
-        wall1.set_position(Vector(-3, 0, -2))
-        wall1.rotate(Vector(1, 0, 0), 90)
-        wall1.rotate(Vector(0, 1, 0), 180)
-        self.solids.append(wall1)
-
-        # Maze
-
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(2, 2, 0))
         self.solids.append(cubeWall)
-
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(4, 2, 0))
         self.solids.append(cubeWall)
-
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(-2, 2, 0))
         self.solids.append(cubeWall)
-
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(-4, 2, 0))
         self.solids.append(cubeWall)
-
         cubeWall = Cube([0, 1.0, 0], texture2)
         cubeWall.set_position(Vector(-6, 2, 0))
         self.solids.append(cubeWall)
@@ -150,4 +139,8 @@ class Initial(Level):
         self.solids.append(cubeWall)
         cubeWall = Cube([0, 1.0, 0], texture3)
         cubeWall.set_position(Vector(6, -4, 0))
+        self.solids.append(cubeWall)
+
+        cubeWall = Cube([0, 1.0, 0], texture3)
+        cubeWall.set_position(Vector(0, 8, 0), scale=Vector(2, 2, 2))
         self.solids.append(cubeWall)

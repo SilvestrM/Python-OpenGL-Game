@@ -9,8 +9,10 @@ from model.Vector import Vector
 
 class Renderer:
     def __init__(self, scene: Scene):
-        self.angle = 0
         self.scene = scene
+        glClearColor(0.1, 0.1, 0.1, 1.0)
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
 
     def display(self):
         # glViewport(0, 0, self.scene.size[0], self.scene.size[1])
@@ -31,6 +33,7 @@ class Renderer:
         glPushMatrix()
         glLoadIdentity()
         gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, 500)
+        # gluOrtho2D(self.scene.size[0], self.scene.size[1], 0.1, 500)
 
         glEnable(GL_FOG)
         glFogi(GL_FOG_MODE, GL_EXP2)
@@ -59,7 +62,7 @@ class Renderer:
             e += 1
         glEnd()
 
-        sky_cam = Camera(Vector(0,0,0), self.scene.player.azimuth, self.scene.player.zenith, self.scene.player.radius)
+        sky_cam = Camera(Vector(0, 0, 0), self.scene.player.azimuth, self.scene.player.zenith, self.scene.player.radius)
         glPopMatrix()
 
         for solid in self.scene.solids:
@@ -70,6 +73,7 @@ class Renderer:
             glMatrixMode(GL_MODELVIEW)
             glPopMatrix()
 
+        # Skybox
         glDisable(GL_FOG)
         glDisable(GL_CULL_FACE)
         glDepthMask(GL_FALSE)
@@ -88,29 +92,10 @@ class Renderer:
         # glPopMatrix()
 
     def render(self, solid: Solid):
-        # glMatrixMode(GL_TEXTURE)
-        glEnable(GL_TEXTURE_2D)
-        solid.texture.set_state()
-        # pyglet.gl.glBindTexture(GL_TEXTURE_2D, solid.texture.texture)
         glMatrixMode(GL_MODELVIEW)
         # glGetFloatv(GL_MODELVIEW_MATRIX, solid.model)
         glMultMatrixf(solid.model)
-
-        # glPushMatrix()
-        # self.angle += 1
-        # glRotatef(self.angle, 0.1, 0.1, 0.1)
-        # glPopMatrix()
-
-        glEnable(GL_TEXTURE_2D)
         glDisable(GL_LIGHTING)
-        glActiveTexture(GL_TEXTURE0)
-
         glShadeModel(GL_SMOOTH)
 
-        # bind_texture(self.scene.texture1)
-
-        # glPushMatrix()
-
         solid.draw()
-
-        # glPopMatrix()

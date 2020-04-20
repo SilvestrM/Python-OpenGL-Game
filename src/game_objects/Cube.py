@@ -10,40 +10,45 @@ import pyglet.graphics
 
 class Cube(Solid):
 
-    def __init__(self, color: list, texture=""):
+    def __init__(self, color: list, texture="", size=1):
         super().__init__(color, texture)
 
         texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
 
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
-        size = 1
-        self.size = size
+        self.sizes = [size, size, size]
         self.center_dist = 0
         self.bounding_box = BoundingBox(self.position, size, size, size)
 
-        self.vertices = [
-            [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
-            [0, size, size]]
-        self.bounding_box = self.vertices
+        # self.vertices = [
+        #     [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
+        #     [0, size, size]]
+        # self.bounding_box = self.vertices
 
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (size, -size, -size, -size, -size, -size, -size, size, -size, size, size, -size)),
-                       colors,
+                       ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
                        texture_coords)  # bottom
+
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (-size, -size, size, size, -size, size, size, size, size, -size, size, size)),
+                       ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
                        texture_coords)  # top
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (-size, -size, size, -size, size, size, -size, size, -size, -size, -size, -size,)),
+                       ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
                        texture_coords)  # left
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (size, -size, -size, size, size, -size, size, size, size, size, -size, size,)),
+                       ('n3f', (1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0)),
                        texture_coords)  # right
         self.batch.add(4, GL_QUADS, self.texture,
+                       ('n3f', (0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0)),
                        ('v3f', (-size, -size, -size, size, -size, -size, size, -size, size, -size, -size, size)),
                        texture_coords)  # back
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (-size, size, size, size, size, size, size, size, -size, -size, size, -size)),
+                       ('n3f', (0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)),
                        texture_coords)  # front
 
         self.shader_source = ""
@@ -69,4 +74,4 @@ class Cube(Solid):
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):
         super().set_position(translate, rotate_angle, rotate, scale)
-        self.bounding_box = BoundingBox(self.position, scale.x, scale.y, scale.z)
+        self.bounding_box = BoundingBox(self.position, self.sizes[0], self.sizes[1], self.sizes[2])

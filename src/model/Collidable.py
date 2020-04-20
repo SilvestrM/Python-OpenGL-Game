@@ -4,7 +4,6 @@ import pyglet
 import pyglet.gl
 
 from model.Vector import Vector
-from utils import Utils
 
 
 class Collidable:

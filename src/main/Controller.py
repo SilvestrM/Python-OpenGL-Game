@@ -1,8 +1,5 @@
 import math
-from abc import ABC
 
-import glfw
-import pygame
 from pyglet import *
 from OpenGL.GLU import *
 
@@ -24,5 +21,4 @@ class Controller:
 
         self.win.set_size(self.win_size[0], self.win_size[1])
         self.win.set_caption("PGRF")
-        # self.win.set_exclusive_mouse()
         app.run()

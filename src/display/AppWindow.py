@@ -19,10 +19,6 @@ class AppWindow(pyglet.window.Window):
         self.push_handlers(self.keys)
         self.fps_display = window.FPSDisplay(self)
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
-        glClearColor(0.1, 0.1, 0.1, 1.0)
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
-
 
     def on_draw(self):
         self.clear()
@@ -31,15 +27,6 @@ class AppWindow(pyglet.window.Window):
 
     def update(self, dt):
         moved = False
-        normalised_pos = self.scene.player.position.normalise()
-        # d = self.scene.camera.position.x - normalised_pos.x
-        # print(d)
-
-        # if collides:
-        #     print(collides)
-        #     collides_dir = solid.collides_with(self.scene.camera)
-        #     print(collides_dir)
-
         if self.keys[key.W]:
             self.scene.player.move_forward(dt * self.scene.camera_speed)
             moved = True
@@ -52,7 +39,6 @@ class AppWindow(pyglet.window.Window):
         if self.keys[key.D]:
             self.scene.player.move_right(dt * self.scene.camera_speed)
             moved = True
-
         self.scene.update(dt, moved)
 
     def on_key_press(self, symbol, modifiers):

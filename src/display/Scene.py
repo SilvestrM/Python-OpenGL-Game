@@ -49,21 +49,23 @@ class Scene:
         if moved:
             for solid in self.solids:
                 if isinstance(solid, Cube):
-                    collides = Utils.insersects_point(self.player.position, solid.bounding_box, padding)
+                    center_dist = math.sqrt(
+                        math.pow(
+                            self.player.position.x - solid.position.x, 2) + math.pow(
+                            self.player.position.y - solid.position.y, 2) + math.pow(
+                            self.player.position.z - solid.position.z, 2))
+                    max_size = max(solid.sizes)
+
+                    if center_dist > max_size + 2:
+                        continue
+                    collides = Utils.collides_point(self.player.position, solid.bounding_box, padding)
                     if collides:
                         print("tru")
-
-                        solid.center_dist = math.sqrt(
-                            math.pow(
-                                self.player.position.x - solid.position.x, 2) + math.pow(
-                                self.player.position.y - solid.position.y, 2) + math.pow(
-                                self.player.position.z - solid.position.z, 2))
                         collided_objects.append(solid)
-                        print("solid- senter", solid.center_dist)
 
         if len(collided_objects) > 0:
             collided_objects.sort(key=lambda x: x.center_dist, reverse=True)
-            print("solid- senter", collided_objects)
+            print("solid - center", collided_objects)
             # self.prev = ''
 
             # for collided_object in collided_objects:
