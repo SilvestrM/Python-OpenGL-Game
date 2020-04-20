@@ -88,11 +88,12 @@ class Skybox:
         # glEnable(GL_TEXTURE_GEN_T)
         # glEnable(GL_TEXTURE_GEN_R)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
-        glColor3f(0.93, 0.89, 0.57)
+
         glMatrixMode(GL_TEXTURE)
 
         glPushMatrix()
         glLoadIdentity()
+        glColor3f(0.93, 0.89, 0.57)
         glRotatef(0, 0, 0, 1)
         self.bottom.draw(GL_QUADS)
         glPopMatrix()
