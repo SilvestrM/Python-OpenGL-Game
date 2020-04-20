@@ -20,7 +20,7 @@ class Renderer:
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
-        glEnable(GL_TEXTURE_2D)
+        # glEnable(GL_TEXTURE_2D)
         glDisable(GL_LIGHTING)
         # glEnable(GL_BLEND)
         # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -80,6 +80,8 @@ class Renderer:
         glPushMatrix()
         sky_cam.set_matrix()
         self.scene.skybox.draw()
+
+        glMatrixMode(GL_MODELVIEW)
         glPopMatrix()
         glDepthMask(GL_TRUE)
 

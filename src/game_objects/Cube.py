@@ -13,7 +13,7 @@ class Cube(Solid):
     def __init__(self, color: list, texture="", size=1):
         super().__init__(color, texture)
 
-        texture_coords = ('t2f', (0, 0, 0.5, 0, 0.5, 0.5, 0, 0.5))
+        texture_coords = ('t2f', (0, 0, 1, 0, 1, 1, 0, 1))
 
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
         self.sizes = [size, size, size]

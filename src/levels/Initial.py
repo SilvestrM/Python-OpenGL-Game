@@ -7,7 +7,7 @@ from model.Vector import Vector
 
 class Initial(Level):
     def __init__(self):
-        texture2 = 'stoneWall1.jpg'
+        texture2 = 'stoneWall2.jpg'
         texture1 = 'dirt1.jpg'
         texture3 = 'woodenWall1.jpg'
         texture_ceil = 'darkstone1.jpg'
