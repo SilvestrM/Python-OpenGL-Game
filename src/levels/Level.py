@@ -1,4 +1,5 @@
 class Level:
     solids = [],
-    skybox = None
+    skybox = None,
+    ambience = None
 

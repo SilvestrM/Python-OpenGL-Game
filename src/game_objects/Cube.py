@@ -35,8 +35,8 @@ class Cube(Solid):
                        ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
                        texture_coords)  # top
         self.batch.add(4, GL_QUADS, self.texture,
-                       ('v3f', (-size, -size, size, -size, size, size, -size, size, -size, -size, -size, -size,)),
-                       ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
+                       ('v3f', (-size, size, -size, -size, -size, -size, -size, -size, size, -size, size, size,)),
+                       ('n3f', (-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0)),
                        texture_coords)  # left
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (size, -size, -size, size, size, -size, size, size, size, size, -size, size,)),
@@ -47,7 +47,7 @@ class Cube(Solid):
                        ('v3f', (-size, -size, -size, size, -size, -size, size, -size, size, -size, -size, size)),
                        texture_coords)  # back
         self.batch.add(4, GL_QUADS, self.texture,
-                       ('v3f', (-size, size, size, size, size, size, size, size, -size, -size, size, -size)),
+                       ('v3f', (size, size, -size, -size, size, -size, -size, size, size, size, size, size)),
                        ('n3f', (0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)),
                        texture_coords)  # front
 
@@ -71,7 +71,6 @@ class Cube(Solid):
         #     [min_x, max_y, max_z, max_x, max_y, max_z, max_x, max_y, min_z, min_x, max_y, min_z]
         # )
 
-    def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
-                     scale=Vector(1.0, 1.0, 1.0)):
-        super().set_position(translate, rotate_angle, rotate, scale)
+    def set_position(self, *args, **kwargs):
+        super().set_position(*args, **kwargs)
         self.bounding_box = BoundingBox(self.position, self.sizes[0], self.sizes[1], self.sizes[2])

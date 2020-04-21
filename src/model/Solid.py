@@ -23,10 +23,11 @@ class Solid:
     sizes = [1, 1, 1]
 
     def __init__(self, color, texture):
-        super().__init__()
         self.batch = pyglet.graphics.Batch()
         self.color = color
-        self.texture = load_texture(texture)
+        self.texture = texture
+        # self.texture = load_texture(texture)
+        print("Generating solid..." + str(self))
 
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):
@@ -53,7 +54,9 @@ class Solid:
         # glColor3f(self.color[0], self.color[1], self.color[2])
         # self.draw_box()
         glEnable(GL_TEXTURE_2D)
-        self.texture.set_state()
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
+        self.texture.set_state()
         self.batch.draw()
         glDisable(GL_TEXTURE_2D)

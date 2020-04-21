@@ -1,5 +1,7 @@
 import math
 
+import pyglet
+
 from display.Player import Player
 from game_objects.Axes import Axes
 from game_objects.Cube import Cube
@@ -13,36 +15,46 @@ class Scene:
     solids = []
 
     def __init__(self, size: tuple, level: Level):
+
         self.angle = 0
         self.camera_speed = 3
         self.FPS = 1000 / 60
         self.cam_x = 0
         self.cam_y = 0
+        self.render_distance = 100
 
         self.prev = ''
+        self.fog_density = 0.05
+        self.fog_mode = 0
 
         self.solids = level.solids
         self.skybox = level.skybox
 
+        self.ambience_player = pyglet.media.Player()
+        self.ambience_player.queue(pyglet.media.StaticSource(pyglet.media.load('../resources/SFX/' + level.ambience)))
+        self.ambience_player.volume = 0.8
+        self.ambience_player.loop = True
+        self.ambience_player.play()
+
         self.size = size
-        texture1 = 'brokenBricks.jpg'
-        texture2 = 'dirt1.jpg'
-        texture3 = 'woodenWall1.jpg'
 
-        # self.camera = Camera(Vector(25, 0.0, 0.0), 90, -20, 1)
         self.player = Player(1, Vector(4, 0, 0), 0, 0, 1)
-
-        # gluPerspective(90, (self.win_size[0] / self.win_size[1]), 0.1, 50.0)
 
         self.axes = Axes()
 
-    def update(self, dt, moved):
-        # if self.camera.position.z > 0 and not self.camera.is_jumping:
-        #     self.camera.position.z -= dt * self.camera.mass
-        # elif self.camera.position.z < 0.5 and not self.camera.is_jumping:
-        #     self.camera.position.z += dt * self.camera_speed
-        self.player.update(dt)
+    def toggle_fog_mode(self):
+        if self.fog_mode == 0:
+            self.fog_mode = 1
+        else:
+            self.fog_mode = 0
 
+    def update(self, dt, moved):
+        if self.fog_mode != 0:
+            self.fog_density = 0.80
+        else:
+            self.fog_density = 0.05
+
+        self.player.update(dt)
         collided_objects = []
         padding = self.player.padding
 

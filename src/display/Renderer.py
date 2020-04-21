@@ -15,8 +15,8 @@ class Renderer:
         glEnable(GL_CULL_FACE)
 
     def display(self):
-        # glViewport(0, 0, self.scene.size[0], self.scene.size[1])
-        # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glViewport(0, 0, self.scene.size[0], self.scene.size[1])
+        glEnable(GL_MULTISAMPLE)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
@@ -32,18 +32,17 @@ class Renderer:
         glMatrixMode(GL_PROJECTION)
         glPushMatrix()
         glLoadIdentity()
-        gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, 500)
+        gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
         # gluOrtho2D(self.scene.size[0], self.scene.size[1], 0.1, 500)
 
         glEnable(GL_FOG)
         glFogi(GL_FOG_MODE, GL_EXP2)
-        glFogi(GL_FOG_START, 0)
-        glFogi(GL_FOG_END, 100)
-        glFogf(GL_FOG_DENSITY, 0.05)
-        glFogfv(GL_FOG_COLOR, [0.93, 0.89, 0.57, 1])
+        glFogi(GL_FOG_START, 10)
+        glFogi(GL_FOG_END, 25)
+        glFogf(GL_FOG_DENSITY, self.scene.fog_density)
+        glFogfv(GL_FOG_COLOR, [0.93, 0.89, 0.57, 0.1])
 
         # cam
-
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glPushMatrix()
@@ -54,16 +53,15 @@ class Renderer:
         glEnable(GL_LINE_SMOOTH)
 
         glBegin(GL_LINES)
-        e = 0
         for i, edge in enumerate(self.scene.axes.edges):
             for vertex in edge:
                 glColor3fv(self.scene.axes.colors[i])
                 glVertex3fv(self.scene.axes.vertices[vertex])
-            e += 1
         glEnd()
 
         sky_cam = Camera(Vector(0, 0, 0), self.scene.player.azimuth, self.scene.player.zenith, self.scene.player.radius)
         glPopMatrix()
+        glShadeModel(GL_SMOOTH)
 
         for solid in self.scene.solids:
             glPushMatrix()
@@ -76,13 +74,17 @@ class Renderer:
         # Skybox
         glDisable(GL_FOG)
         glDisable(GL_CULL_FACE)
-        glDepthMask(GL_FALSE)
+        # glDepthMask(GL_FALSE)
+        glDisable(GL_MULTISAMPLE)
+
         glPushMatrix()
         sky_cam.set_matrix()
+        glRotatef(self.scene.skybox.rotate(), 0, 0, 1)
         self.scene.skybox.draw()
 
         glMatrixMode(GL_MODELVIEW)
         glPopMatrix()
+
         glDepthMask(GL_TRUE)
 
         # cam
@@ -98,6 +100,5 @@ class Renderer:
         # glGetFloatv(GL_MODELVIEW_MATRIX, solid.model)
         glMultMatrixf(solid.model)
         glDisable(GL_LIGHTING)
-        glShadeModel(GL_SMOOTH)
 
         solid.draw()

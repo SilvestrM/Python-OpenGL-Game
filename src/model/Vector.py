@@ -31,4 +31,4 @@ class Vector:
         return Vector(int(round(self.x)), int(round(self.y)), int(round(self.z)))
 
     def to_string(self):
-        return str.format(str(self.x) + ":" + str(self.y) + ":" + str(self.z))
+        return str.format("x: " + str(round(self.x, 2)) + " y: " + str(round(self.y, 2)) + " z: " + str(round(self.z, 2)))
