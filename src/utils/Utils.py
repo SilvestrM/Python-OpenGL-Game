@@ -21,7 +21,6 @@ def load_texture(file, cube=False):
             aaf_amount = min(4, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY))
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, aaf_amount)
 
-
         else:
             texture = image.get_texture()
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)

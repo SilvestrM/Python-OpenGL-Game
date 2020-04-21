@@ -37,8 +37,8 @@ class Renderer:
 
         glEnable(GL_FOG)
         glFogi(GL_FOG_MODE, GL_EXP2)
-        glFogi(GL_FOG_START, 10)
-        glFogi(GL_FOG_END, 25)
+        glFogi(GL_FOG_START, 6)
+        glFogi(GL_FOG_END, 12)
         glFogf(GL_FOG_DENSITY, self.scene.fog_density)
         glFogfv(GL_FOG_COLOR, [0.93, 0.89, 0.57, 0.1])
 

@@ -50,7 +50,7 @@ class Scene:
 
     def update(self, dt, moved):
         if self.fog_mode != 0:
-            self.fog_density = 0.80
+            self.fog_density = 0.25
         else:
             self.fog_density = 0.05
 
