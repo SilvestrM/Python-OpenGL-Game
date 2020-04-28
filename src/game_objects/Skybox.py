@@ -12,6 +12,8 @@ def get_st(sc, tc, ma):
 
 
 class Skybox:
+    # Skybox class
+
     def __init__(self, texture):
         self.rotation = 0
         self.batch = pyglet.graphics.Batch()
@@ -76,6 +78,8 @@ class Skybox:
                                 1, -1,-1,)))  # front
         
     def rotate(self):
+        # Atmospheric slow rotation
+
         self.rotation += 0.01
         return self.rotation
 

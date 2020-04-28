@@ -1,4 +1,6 @@
 class Vector:
+    # Universal class with, x,y,z coordinates
+
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
@@ -7,7 +9,7 @@ class Vector:
     def add(self, v):
         return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
 
-    def __add__(self, v):
+    def __add__(self, v: float or int):
         return Vector(self.x + v, self.y + v, self.z + v)
 
     def sub(self, v):
@@ -16,7 +18,7 @@ class Vector:
     def __sub__(self, v: float or int):
         return Vector(self.x - v, self.y - v, self.z - v)
 
-    def multi_v(self, v: super):
+    def multi_v(self, v):
         return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
 
     def multi_d(self, v):

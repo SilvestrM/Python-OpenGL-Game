@@ -1,5 +1,6 @@
 import math
 
+import pyglet
 from pyglet import *
 from OpenGL.GLU import *
 
@@ -11,7 +12,12 @@ from levels.Initial import Initial
 
 class Controller:
     def __init__(self):
+        pyglet.resource.path = ['resources', 'resources/SFX', 'resources/skybox']
+        pyglet.resource.reindex()
+
         self.win_size = (1280, 920)
+
+        options['debug_graphics_batch'] = True
         config = gl.Config()
         # config.stencil_size = 8
         config.sample_buffers = 1

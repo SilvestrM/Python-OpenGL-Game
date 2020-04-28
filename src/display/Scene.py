@@ -30,9 +30,11 @@ class Scene:
         self.solids = level.solids
         self.skybox = level.skybox
 
+        # Ambience track
+
         self.ambience_player = pyglet.media.Player()
         self.ambience_player.queue(pyglet.media.StaticSource(pyglet.media.load('../resources/SFX/' + level.ambience)))
-        self.ambience_player.volume = 0.8
+        self.ambience_player.volume = 0.5
         self.ambience_player.loop = True
         self.ambience_player.play()
 
@@ -55,6 +57,9 @@ class Scene:
             self.fog_density = 0.05
 
         self.player.update(dt)
+
+        # Collisions logic
+
         collided_objects = []
         padding = self.player.padding
 
@@ -219,19 +224,19 @@ class Scene:
                 dist_max_x = math.fabs(self.player.position.x + padding - box.max_x)
                 dist_min_y = math.fabs(self.player.position.y + padding - box.min_y)
                 dist_max_y = math.fabs(self.player.position.y + padding - box.max_y)
-                dist_min_z = math.fabs(self.player.position.z - box.min_z)
-                dist_max_z = math.fabs(self.player.position.z - box.max_z)
+                dist_min_z = math.fabs(self.player.position.z + padding - box.min_z)
+                dist_max_z = math.fabs(self.player.position.z + padding - box.max_z)
 
                 distances = [dist_min_x - math.fabs(center_dist.x), dist_max_x - math.fabs(center_dist.x),
                              dist_min_y - math.fabs(center_dist.y), dist_max_y - math.fabs(center_dist.y),
                              dist_min_z - math.fabs(center_dist.z), dist_max_z - math.fabs(center_dist.z)]
 
-                print("nX", dist_min_x, "-", distances[0])
-                print("xX", dist_max_x, "-", distances[1])
-                print("nY", dist_min_y, "-", distances[2])
-                print("xY", dist_max_y, "-", distances[3])
-                print("nZ", dist_min_z, "-", distances[4])
-                print("xZ", dist_max_z, "-", distances[5])
+                print("nX", dist_min_x, "- adjusted ", distances[0])
+                print("xX", dist_max_x, "- adjusted ", distances[1])
+                print("nY", dist_min_y, "- adjusted ", distances[2])
+                print("xY", dist_max_y, "- adjusted ", distances[3])
+                print("nZ", dist_min_z, "- adjusted ", distances[4])
+                print("xZ", dist_max_z, "- adjusted ", distances[5])
                 print("center", center_dist.to_string())
 
                 minimum = min(range(len(distances)), key=distances.__getitem__)

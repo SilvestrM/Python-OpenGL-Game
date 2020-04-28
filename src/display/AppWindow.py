@@ -12,6 +12,7 @@ class AppWindow(pyglet.window.Window):
         super().__init__(*args, **kwargs)
         self.renderer = renderer
         self.scene = scene
+
         self.keys = key.KeyStateHandler()
         self._exclusive = True
         self.set_exclusive_mouse(self._exclusive)
@@ -22,22 +23,29 @@ class AppWindow(pyglet.window.Window):
         self.fps_display = window.FPSDisplay(self)
         self.label = pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=scene.size[1] - 10,
                                        color=(255, 255, 255, 255), anchor_y='top')
-        self.dirt_step = pyglet.media.StaticSource(pyglet.media.load('../resources/SFX/jogDirt1.wav'))
+        self.dirt_step = pyglet.media.StaticSource(pyglet.resource.media('jogDirt1.wav'))
 
         self.step_player = pyglet.media.Player()
         self.time_since_last_move = 0
-
 
     def on_draw(self):
         self.clear()
         self.renderer.display()
 
         glDisable(GL_DEPTH_TEST)
+
+        # display labels
+
+        # fps
         self.fps_display.draw()
+
+        # position
         pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.scene.size[1] - 10,
                           color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
 
     def toggle_exclusive(self):
+        # toggles pyglet exclusive mouse mode
+
         if not self._exclusive:
             self._exclusive = True
             self.set_exclusive_mouse(True)
@@ -46,7 +54,9 @@ class AppWindow(pyglet.window.Window):
             self.set_exclusive_mouse(False)
 
     def update(self, dt):
+        # if player moved
         moved = False
+
         if self.keys[key.W]:
             self.play_step(self.step_player, self.dirt_step)
             self.scene.player.move_forward(dt * self.scene.camera_speed)
@@ -64,23 +74,29 @@ class AppWindow(pyglet.window.Window):
             self.scene.player.move_right(dt * self.scene.camera_speed)
             moved = True
 
+        # soft sound cut
+        # so the steps are not cut instantly after the player stops moving
         if not moved:
-
-            # soft sound cut
             self.time_since_last_move += dt
             if self.time_since_last_move > 0.2:
                 self.step_player.pause()
         else:
             self.time_since_last_move = 0
 
+        # update the scene
         self.scene.update(dt, moved)
 
     def play_step(self, player, source):
+        # checks so the queue is not filled after every update when moving,
+        # queues sound only if tehre isnt one already playing
+
         player.play()
         if not player.source:
             player.queue(source)
 
     def on_key_press(self, symbol, modifiers):
+        # Key listeners not based on FPS
+
         if symbol == key.ESCAPE:
             self.close()
         if symbol == key.SPACE:

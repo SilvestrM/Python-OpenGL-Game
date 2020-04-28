@@ -12,7 +12,8 @@ class Panel(Solid):
         size = 1
         self.bounding_box = BoundingBox(self.position, size, size, 0.01)
 
-        self.batch.add(4, GL_QUADS, self.texture, ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
+        self.batch.add(4, GL_QUADS, self.texture,
+                       ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
                        ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
                        texture_coords)  # front
         self.batch.add(4, GL_QUADS, self.texture,

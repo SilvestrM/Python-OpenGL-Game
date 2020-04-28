@@ -29,7 +29,6 @@ class Cube(Solid):
                        ('v3f', (size, -size, -size, -size, -size, -size, -size, size, -size, size, size, -size)),
                        ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
                        texture_coords)  # bottom
-
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (-size, -size, size, size, -size, size, size, size, size, -size, size, size)),
                        ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
