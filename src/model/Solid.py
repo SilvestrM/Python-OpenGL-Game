@@ -27,7 +27,7 @@ class Solid:
         self.color = color
         self.texture = texture
         # self.texture = load_texture(texture)
-        print("Generating solid..." + str(self))
+        # print("Generating solid..." + str(self))
 
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
                      scale=Vector(1.0, 1.0, 1.0)):

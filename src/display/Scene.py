@@ -33,7 +33,7 @@ class Scene:
         # Ambience track
 
         self.ambience_player = pyglet.media.Player()
-        self.ambience_player.queue(pyglet.media.StaticSource(pyglet.media.load('../resources/SFX/' + level.ambience)))
+        self.ambience_player.queue(pyglet.media.StaticSource(pyglet.resource.media(level.ambience)))
         self.ambience_player.volume = 0.5
         self.ambience_player.loop = True
         self.ambience_player.play()

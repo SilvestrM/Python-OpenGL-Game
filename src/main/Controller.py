@@ -34,3 +34,4 @@ class Controller:
         self.win.set_size(self.win_size[0], self.win_size[1])
         self.win.set_caption("PGRF")
         app.run()
+        pyglet.resource.reindex()

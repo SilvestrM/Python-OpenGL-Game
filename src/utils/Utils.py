@@ -7,15 +7,15 @@ from OpenGL.GL import *
 from model.Vector import Vector
 
 
-def resource_path(relative_path):
+def resource_path(relative):
     if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+        return os.path.join(sys._MEIPASS, relative)
+    return os.path.join(os.path.abspath("."), relative)
 
 
 def load_texture(file, cube=False):
     if file:
-        # image = pyglet.image.load('../resources/' + file)
+        # image = pyglet.image.load(resource_path('../resources/' + file))
         image = pyglet.resource.image(file).get_image_data()
         # texture = image.get_region(0,0,256,256).get_mipmapped_texture()
 
@@ -66,31 +66,38 @@ def load_cubemap_texture(file):
     # tex_right = pyglet.image.load('../resources/skybox/' + file + '-right.jpg').get_image_data()
     # tex_back = pyglet.image.load('../resources/skybox/' + file + '-back.jpg').get_image_data()
     # tex_front = pyglet.image.load('../resources/skybox/' + file + '-front.jpg').get_image_data()
-    #
-    # tex_width = round(tex_bottom.width)
-    # tex_height = round(tex_bottom.height)
-    #
-    # # tex_bottom = image.get_region(tex_width, 0, tex_width, tex_height).get_image_data()
-    # # tex_top = image.get_region(tex_width, tex_height*2, tex_width, tex_height).get_image_data()
-    # # tex_left = image.get_region(0, tex_height, tex_width, tex_height).get_image_data()
-    # # tex_right = image.get_region(tex_width*2, tex_height, tex_width, tex_height).get_image_data()
-    # # tex_back = image.get_region(tex_width*3, tex_height, tex_width, tex_height).get_image_data()
-    # # tex_front = image.get_region(tex_width,tex_height, tex_width, tex_height).get_image_data()
-    #
-    # glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_bottom.get_data())
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_top.get_data())
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_left.get_data())
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_right.get_data())
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_back.get_data())
-    # glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
-    #              tex_front.get_data())
-    # glGenerateMipmap(GL_TEXTURE_CUBE_MAP)
+
+    tex_bottom = pyglet.resource.image(file + '-bottom.jpg').get_image_data()
+    tex_top = pyglet.resource.image(file + '-top.jpg').get_image_data()
+    tex_left = pyglet.resource.image(file + '-left.jpg').get_image_data()
+    tex_right = pyglet.resource.image(file + '-right.jpg').get_image_data()
+    tex_back = pyglet.resource.image(file + '-back.jpg').get_image_data()
+    tex_front = pyglet.resource.image(file + '-front.jpg').get_image_data()
+
+    tex_width = round(tex_bottom.width)
+    tex_height = round(tex_bottom.height)
+
+    # tex_bottom = image.get_region(tex_width, 0, tex_width, tex_height).get_image_data()
+    # tex_top = image.get_region(tex_width, tex_height*2, tex_width, tex_height).get_image_data()
+    # tex_left = image.get_region(0, tex_height, tex_width, tex_height).get_image_data()
+    # tex_right = image.get_region(tex_width*2, tex_height, tex_width, tex_height).get_image_data()
+    # tex_back = image.get_region(tex_width*3, tex_height, tex_width, tex_height).get_image_data()
+    # tex_front = image.get_region(tex_width,tex_height, tex_width, tex_height).get_image_data()
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id)
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_bottom.get_data())
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_top.get_data())
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_left.get_data())
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_right.get_data())
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_back.get_data())
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, tex_width, tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 tex_front.get_data())
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP)
 
     # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
     # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
