@@ -8,16 +8,19 @@ from utils.Utils import load_texture
 
 class Initial(Level):
     def __init__(self):
+
         texture_stonewall = load_texture('stoneWall2.jpg')
         texture_dirt = load_texture('dirt2.jpg')
         texture_woodenwall = load_texture('woodenWall4.jpg')
         texture_rock = load_texture('rockWall1.jpg')
-        texture_ceil = 'darkstone1.jpg'
+
         self.ambience = 'desertambientl.wav'
 
         self.skybox = Skybox("skybox1.png")
 
         self.solids = []
+
+        print("Generating solids... in " + str(self))
 
         max = 20
         for i in range(-max, max, 2):
@@ -284,6 +287,11 @@ class Initial(Level):
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
         cubeWall.set_position(Vector(6, -4, 0))
         self.solids.append(cubeWall)
+
+        cubeWall = Cube([0, 1.0, 0], texture_stonewall)
+        cubeWall.set_position(Vector(6, 2, 0.75), scale=Vector(1.5,0.9,0.5))
+        self.solids.append(cubeWall)
+
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
         cubeWall.set_position(Vector(8, -4, 0))
         self.solids.append(cubeWall)

@@ -47,9 +47,6 @@ class Solid:
         self.model = glGetFloatv(GL_MODELVIEW_MATRIX, self.model)
 
     def draw(self):
-        # glDisable(GL_TEXTURE_2D)
-        # glColor3f(self.color[0], self.color[1], self.color[2])
-        # self.draw_box()
         glEnable(GL_TEXTURE_2D)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)

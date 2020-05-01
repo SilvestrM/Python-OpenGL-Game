@@ -5,7 +5,10 @@ import pyglet
 from display.Player import Player
 from game_objects.Axes import Axes
 from game_objects.Cube import Cube
+from game_objects.Panel import Panel
 from levels.Level import Level
+from model.Collidable import Collidable
+from model.Solid import Solid
 from model.Vector import Vector
 from utils import Utils
 
@@ -17,6 +20,8 @@ class Scene:
 
         self.collided_number = None
         self.render_distance = 100
+
+
 
         self.prev_collision = ''
         self.fog_density = 0.05
@@ -36,7 +41,7 @@ class Scene:
         self.size = size
 
         self.player = Player(1, Vector(4, 0, 0), 0, 0, 1)
-
+        self.ground_zero = self.player.height / 2
         self.axes = Axes()
 
     def toggle_fog_mode(self):
@@ -51,110 +56,52 @@ class Scene:
         else:
             self.fog_density = 0.05
 
-        self.player.update(dt)
-
+        self.player.update_pos(dt)
+        self.player.update_physics(dt, self.ground_zero)
         # Collisions logic
 
         collided_objects = []
-        padding = self.player.padding
 
-        if moved:
-            for solid in self.solids:
-                if isinstance(solid, Cube):
-                    center_dist = math.sqrt(
-                        math.pow(
-                            self.player.position.x - solid.position.x, 2) + math.pow(
-                            self.player.position.y - solid.position.y, 2) + math.pow(
-                            self.player.position.z - solid.position.z, 2))
-                    max_size = max(solid.sizes)
+        for solid in self.solids:
+            if hasattr(solid, 'bounding_box'):
+                center_dist = math.sqrt(
+                    math.pow(
+                        self.player.position.x - solid.position.x, 2) + math.pow(
+                        self.player.position.y - solid.position.y, 2) + math.pow(
+                        self.player.position.z - solid.position.z, 2))
+                max_size = max(solid.sizes)
 
-                    # To check just solids that are close
-                    if center_dist > max_size + 2:
-                        continue
+                # To check just solids that are close
+                if center_dist > max_size + 2:
+                    continue
 
-                    collides = Utils.collides_point(self.player.position, solid.bounding_box, padding)
+                collides = Utils.collides_box(self.player.bounding_box, solid.bounding_box)
+                # collides = Utils.collides_point(self.player.position, solid.bounding_box, padding)
 
-                    if collides:
-                        print("tru")
-                        collided_objects.append(solid)
+                if collides:
+                    print("tru")
+                    collided_objects.append(solid)
 
         self.collided_number = len(collided_objects)
         if len(collided_objects) > 0:
-            collided_objects.sort(key=lambda x: x.center_dist, reverse=True)
+            # collided_objects.sort(key=lambda x: x.center_dist, reverse=True)
 
             position = self.player.position.normalise()
 
             for collided_object in collided_objects:
 
-                # center_dist = collided_object.center_dist
-                # for corner in collided_object.bounding_box.corners:
-                #     if player.position < corner
-
-                # if collided_object.bounding_box.min.x < self.player.position.x + padding < collided_object.bounding_box.max_x: and
-
-                # for face in collided_object.bounding_box.faces:
-                #     for corner in face:
-                #         for i in range(3):
-                #             if not corner[i]:
-                #                 continue
-                #             overlap = (position[i] - norm_position[i]) * corner[i]
-                #             print(overlap)
-                #             if overlap < padding:
-                #                 continue
-                #             position[i] -= (overlap - padding) * corner[i]
-                #             break
-                # self.player.position = Vector(position[0], position[1], position[2])
                 box = collided_object.bounding_box
-
-                diff = self.player.position.sub(position)
-                print("no", box.max_x)
-                print("no", position.x)
-
-                print("diff", diff.x - padding)
-                print("diff", diff.y - padding)
-
-                print("prev", self.prev_collision)
-
-                # Collision with faces
-
-                # bottom
-                if box.min_x < position.x < box.max_x and box.min_y < position.y < box.max_y and position.z == box.min_z:
-                    self.player.position.z = box.min_z - padding
-                    self.prev_collision = "min_z"
-                    continue
-                # top
-                if box.min_x < position.x < box.max_x and box.min_y < position.y < box.max_y and position.z == box.max_z:
-                    self.player.position.z = box.max_z + padding
-                    self.prev_collision = "max_z"
-                    continue
-                if position.x == box.min_x and box.min_y < position.y < box.max_y and box.min_z < position.z < box.max_z:
-                    self.player.position.x = box.min_x - padding
-                    self.prev_collision = "min_x"
-                    continue
-                if position.x == box.max_x and box.min_y < position.y < box.max_y and box.min_z < position.z < box.max_z:
-                    self.player.position.x = box.max_x + padding
-                    self.prev_collision = "max_x"
-                    continue
-                if box.min_x < position.x < box.max_x and position.y == box.min_y and box.min_z < position.z < box.max_z:
-                    self.player.position.y = box.min_y - padding
-                    self.prev_collision = "min_y"
-                    continue
-                if box.min_x < position.x < box.max_x and position.y == box.max_y and box.min_z < position.z < box.max_z:
-                    self.player.position.y = box.max_y + padding
-                    self.prev_collision = "max_y"
-                    continue
-
-                print("sec")
+                player = self.player.bounding_box
 
                 # Collision at corners
                 center_dist = self.player.position.sub(collided_object.position)
 
-                dist_min_x = math.fabs(self.player.position.x + padding - box.min_x)
-                dist_max_x = math.fabs(self.player.position.x - padding - box.max_x)
-                dist_min_y = math.fabs(self.player.position.y + padding - box.min_y)
-                dist_max_y = math.fabs(self.player.position.y - padding - box.max_y)
-                dist_min_z = math.fabs(self.player.position.z + padding - box.min_z)
-                dist_max_z = math.fabs(self.player.position.z - padding - box.max_z)
+                dist_min_x = math.fabs(player.max_x - box.min_x)
+                dist_max_x = math.fabs(player.min_x - box.max_x)
+                dist_min_y = math.fabs(player.max_y - box.min_y)
+                dist_max_y = math.fabs(player.min_y - box.max_y)
+                dist_min_z = math.fabs(player.max_z - box.min_z)
+                dist_max_z = math.fabs(player.min_z - box.max_z)
 
                 distances = [dist_min_x - math.fabs(center_dist.x), dist_max_x - math.fabs(center_dist.x),
                              dist_min_y - math.fabs(center_dist.y), dist_max_y - math.fabs(center_dist.y),
@@ -173,25 +120,27 @@ class Scene:
                 print("min", minimum)
 
                 # works best
-
+                # mai x
                 if minimum == 0:
-                    self.player.position.x = box.min_x - padding
+                    self.player.position.x = box.min_x - player.size_x
                 # max x
                 if minimum == 1:
-                    self.player.position.x = box.max_x + padding
+                    self.player.position.x = box.max_x + player.size_x
                 # min y
                 if minimum == 2:
-                    self.player.position.y = box.min_y - padding
+                    self.player.position.y = box.min_y - player.size_y
                 # max y
                 if minimum == 3:
-                    self.player.position.y = box.max_y + padding
+                    self.player.position.y = box.max_y + player.size_y
+                # min z
                 if minimum == 4:
-                    self.player.position.z = box.min_z - padding
+                    self.player.position.z = box.min_z - player.size_z
+                # max z
                 if minimum == 5:
-                    self.player.position.z = box.max_z + padding
+                    self.player.position.z = box.max_z + player.size_z
 
         # Ground
-        if self.player.position.z < 0:
-            self.player.position.z = 0
 
-
+        if self.player.position.z < self.ground_zero:
+            self.player.position.z = self.ground_zero
+        self.player.update(dt)

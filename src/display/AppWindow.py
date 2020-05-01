@@ -59,7 +59,6 @@ class AppWindow(pyglet.window.Window):
                           y=self.scene.size[1] - 70,
                           color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
 
-
     def toggle_exclusive(self):
         # toggles pyglet exclusive mouse mode
         if not self._exclusive_mouse:
@@ -125,6 +124,8 @@ class AppWindow(pyglet.window.Window):
             self.scene.render_distance -= 1
         if symbol == key.O:
             self.scene.toggle_fog_mode()
+        if symbol == key.C:
+            self.scene.player.crouch()
 
     def on_mouse_motion(self, x, y, dx, dy):
         if self._exclusive_mouse:

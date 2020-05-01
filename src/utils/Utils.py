@@ -119,9 +119,9 @@ def collides_point(point, box, padding):
 
 
 def collides_box(a, b):
-    return (a.minX <= b.maxX and a.maxX >= b.minX) and \
-           (a.minY <= b.maxY and a.maxY >= b.minY) and \
-           (a.minZ <= b.maxZ and a.maxZ >= b.minZ)
+    return (a.min_x <= b.max_x and a.max_x >= b.min_x) and \
+           (a.min_y <= b.max_y and a.max_y >= b.min_y) and \
+           (a.min_z <= b.max_z and a.max_z >= b.min_z)
 
 
 def distance(vec1: Vector, vec2: Vector):

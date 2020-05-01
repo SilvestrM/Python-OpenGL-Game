@@ -1,15 +1,15 @@
 from display.Camera import Camera
-from model.Collidable import Collidable
+from model.BoundingBox import BoundingBox
 from model.Vector import Vector
 
 
 class Player(Camera):
-    def __init__(self, mass, position: Vector, azimuth, zenith, radius: float):
-        super().__init__(position, azimuth, zenith, radius)
+    is_crouching = False
 
-        self.min_x, self.min_y, self.min_z = self.position.x - 0.5, self.position.y - 0.5, self.position.z - 0.5
-        self.max_x, self.max_y, self.max_z = self.min_x + 1, self.min_y + 1, self.min_z + 1
-
+    def __init__(self, mass, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.height = 0.5
+        self.bounding_box = BoundingBox(self.position, 0.4, 0.4, self.height)
         self.speed = 3
 
         self.padding = 0.25
@@ -22,7 +22,7 @@ class Player(Camera):
 
     def jump(self):
         if not self.is_jumping:
-            self.velo = 10
+            self.velo = 2
             self.is_jumping = True
 
     def gravity(self):
@@ -31,8 +31,15 @@ class Player(Camera):
         da = df / self.mass
         return g - da
 
-    def update(self, dt):
-        if self.position.z > 0:
+    def crouch(self):
+        self.is_crouching = not self.is_crouching
+
+    def update_pos(self, dt):
+        self.bounding_box.recalculate_position(self.position)
+
+    def update_physics(self, dt, ground):
+
+        if self.position.z > ground:
             # self.position.z -= (9.8 * self.velo * dt) / self.mass
             self.position.z = self.position.z + self.velo * dt + self.acc * (dt * dt * 0.5)
             acc_n = self.gravity()
@@ -42,7 +49,13 @@ class Player(Camera):
         if self.is_jumping:
             self.velo -= self.mass * dt
             self.position.z += self.velo * dt
-            print(self.acc, self.velo, self.position.z)
 
         if self.velo <= self.acc:
             self.is_jumping = False
+
+    def update(self, dt):
+        if self.is_crouching:
+            self.bounding_box.size_z -= self.bounding_box.size_z * 0.75
+            self.position.z -= 0.75
+        else:
+            self.bounding_box.size_z = self.height
