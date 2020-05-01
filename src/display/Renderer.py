@@ -1,3 +1,7 @@
+import os
+
+import multiprocessing as mp
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -15,6 +19,7 @@ class Renderer:
         glEnable(GL_CULL_FACE)
 
     def display(self):
+
         glViewport(0, 0, self.scene.size[0], self.scene.size[1])
         glEnable(GL_MULTISAMPLE)
         glEnable(GL_DEPTH_TEST)
@@ -63,13 +68,12 @@ class Renderer:
         glPopMatrix()
         glShadeModel(GL_SMOOTH)
 
+        # with mp.Pool(2) as executor:
+        #     for solid in executor.map(self.render, self.scene.solids):
+        #         print(solid)
+
         for solid in self.scene.solids:
-            glPushMatrix()
-            # camera
-            self.scene.player.set_matrix()
             self.render(solid)
-            glMatrixMode(GL_MODELVIEW)
-            glPopMatrix()
 
         # Skybox
         glDisable(GL_FOG)
@@ -96,9 +100,16 @@ class Renderer:
         # glPopMatrix()
 
     def render(self, solid: Solid):
+        print("Executing our Task on Process {}".format(os.getpid()))
+        glMatrixMode(GL_MODELVIEW)
+        glPushMatrix()
+        # camera
+        self.scene.player.set_matrix()
         glMatrixMode(GL_MODELVIEW)
         # glGetFloatv(GL_MODELVIEW_MATRIX, solid.model)
         glMultMatrixf(solid.model)
         glDisable(GL_LIGHTING)
 
         solid.draw()
+        glMatrixMode(GL_MODELVIEW)
+        glPopMatrix()

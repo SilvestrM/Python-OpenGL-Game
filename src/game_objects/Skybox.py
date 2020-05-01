@@ -25,58 +25,72 @@ class Skybox:
         texture_coords = ('t2f', (0, 0, 1, 0, 1, 1, 0, 1))
         size = 50
         normals = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (-1, 0, 0), (0, -1, 0), (0, 0, -1)]
-        color = (('c3f'),(0.93, 0.89, 0.57)*4)
+        color = (('c3f'), (0.93, 0.89, 0.57) * 4)
 
         self.bottom = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
-                       ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
-                        color,
-                       ('t3f', ( 1, 1, -1,
-                                -1, 1, -1,
-                                -1, -1, -1,
-                                1, -1, -1)))  # bottom
+                                                  ('v3f', (
+                                                  -size, -size, -size, size, -size, -size, size, size, -size, -size,
+                                                  size, -size)),
+                                                  ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),
+                                                  color,
+                                                  ('t3f', (1, 1, -1,
+                                                           -1, 1, -1,
+                                                           -1, -1, -1,
+                                                           1, -1, -1)))  # bottom
         self.top = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (-size, -size, size, size, -size, size, size, size, size, -size, size, size)),
-                       ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
-                        color,
-                       ('t3f', (-1, -1, 1,
-                                1, -1, 1,
-                                1, 1, 1,
-                                -1, 1, 1)))  # top
+                                               ('v3f', (
+                                               -size, -size, size, size, -size, size, size, size, size, -size, size,
+                                               size)),
+                                               ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
+                                               color,
+                                               ('t3f', (-1, -1, 1,
+                                                        1, -1, 1,
+                                                        1, 1, 1,
+                                                        -1, 1, 1)))  # top
         self.left = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (-size, -size, -size, -size, size, -size, -size, size, size, -size, -size, size,)),
-                       ('n3f', (-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0)),
-                        color,
-                       ('t3f', (-1, -1, 1,
-                                -1, -1, -1,
-                                -1, 1, -1,
-                                -1, 1, 1,)))  # left
+                                                ('v3f', (
+                                                -size, -size, -size, -size, size, -size, -size, size, size, -size,
+                                                -size, size,)),
+                                                ('n3f', (-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0)),
+                                                color,
+                                                ('t3f', (-1, 1, -1,
+                                                         -1, 1, 1,
+                                                         -1, -1, 1,
+                                                         -1, -1, -1,)))  # left
         self.right = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (size, -size, -size, size, size, -size, size, size, size, size, -size, size,)),
-                       ('n3f', (1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0)),
-                        color,
-                       ('t3f', (1, -1, 1,
-                                1, -1, -1,
-                                1, 1, -1,
-                                1, 1, 1
-                                )))  # right
+                                                 ('v3f', (
+                                                 size, -size, -size, size, size, -size, size, size, size, size, -size,
+                                                 size,)),
+                                                 ('n3f', (1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0)),
+                                                 color,
+                                                 ('t3f', (1, 1, -1,
+                                                          1, 1, 1,
+                                                          1, -1, 1,
+                                                          1, -1, -1,
+                                                          )))  # right
         self.back = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (-size, -size, -size, size, -size, -size, size, -size, size, -size, -size, size)),
-                       ('n3f', (0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0)),
-                        color,
-                       ('t3f', (-1, 1, 1,
-                                1, 1, 1,
-                                1, 1, -1,
-                                -1, 1, -1,)))  # back
+                                                ('v3f', (
+                                                -size, -size, -size, size, -size, -size, size, -size, size, -size,
+                                                -size, size)),
+                                                ('n3f', (0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0)),
+                                                color,
+                                                ('t3f', (
+                                                    -1, -1, 1,
+                                                    1, -1, 1,
+                                                    1, -1, -1,
+                                                    -1, -1, -1,)))  # back
         self.front = pyglet.graphics.Batch().add(4, GL_QUADS, None,
-                       ('v3f', (-size, size, size, size, size, size, size, size, -size, -size, size, -size)),
-                       ('n3f', (0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)),
-                        color,
-                       ('t3f', (1, -1, 1,
-                                -1, -1, 1,
-                                -1, -1, -1,
-                                1, -1,-1,)))  # front
-        
+                                                 ('v3f', (
+                                                 -size, size, size, size, size, size, size, size, -size, -size, size,
+                                                 -size)),
+                                                 ('n3f', (0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)),
+                                                 color,
+                                                 ('t3f', (
+                                                     1, 1, 1,
+                                                     -1, 1, 1,
+                                                     -1, 1, -1,
+                                                     1, 1, -1,)))  # front
+
     def rotate(self):
         # Atmospheric slow rotation
 

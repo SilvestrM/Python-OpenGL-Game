@@ -1,5 +1,5 @@
 import math
-
+import multiprocessing as mp
 import pyglet
 
 from display.Player import Player
@@ -19,11 +19,10 @@ class Scene:
         self.angle = 0
         self.camera_speed = 3
         self.FPS = 1000 / 60
-        self.cam_x = 0
-        self.cam_y = 0
+
         self.render_distance = 100
 
-        self.prev = ''
+        self.prev_collision = ''
         self.fog_density = 0.05
         self.fog_mode = 0
 
@@ -64,6 +63,9 @@ class Scene:
         padding = self.player.padding
 
         if moved:
+            with mp.Pool(2) as executor:
+                for solid in executor.map(self.render, self.scene.solids):
+                    print(solid)
             for solid in self.solids:
                 if isinstance(solid, Cube):
                     center_dist = math.sqrt(
@@ -73,9 +75,12 @@ class Scene:
                             self.player.position.z - solid.position.z, 2))
                     max_size = max(solid.sizes)
 
+                    # To check just solids that are close
                     if center_dist > max_size + 2:
                         continue
+
                     collides = Utils.collides_point(self.player.position, solid.bounding_box, padding)
+
                     if collides:
                         print("tru")
                         collided_objects.append(solid)
@@ -120,32 +125,35 @@ class Scene:
                 print("diff", diff.x - padding)
                 print("diff", diff.y - padding)
 
-                print("prev", self.prev)
+                print("prev", self.prev_collision)
+
+                # Collision with faces
+
                 # bottom
                 if box.min_x < position.x < box.max_x and box.min_y < position.y < box.max_y and position.z == box.min_z:
                     self.player.position.z = box.min_z - padding
-                    self.prev = "min_z"
+                    self.prev_collision = "min_z"
                     continue
                 # top
                 if box.min_x < position.x < box.max_x and box.min_y < position.y < box.max_y and position.z == box.max_z:
                     self.player.position.z = box.max_z + padding
-                    self.prev = "max_z"
+                    self.prev_collision = "max_z"
                     continue
                 if position.x == box.min_x and box.min_y < position.y < box.max_y and box.min_z < position.z < box.max_z:
                     self.player.position.x = box.min_x - padding
-                    self.prev = "min_x"
+                    self.prev_collision = "min_x"
                     continue
                 if position.x == box.max_x and box.min_y < position.y < box.max_y and box.min_z < position.z < box.max_z:
                     self.player.position.x = box.max_x + padding
-                    self.prev = "max_x"
+                    self.prev_collision = "max_x"
                     continue
                 if box.min_x < position.x < box.max_x and position.y == box.min_y and box.min_z < position.z < box.max_z:
                     self.player.position.y = box.min_y - padding
-                    self.prev = "min_y"
+                    self.prev_collision = "min_y"
                     continue
                 if box.min_x < position.x < box.max_x and position.y == box.max_y and box.min_z < position.z < box.max_z:
                     self.player.position.y = box.max_y + padding
-                    self.prev = "max_y"
+                    self.prev_collision = "max_y"
                     continue
 
                 print("sec")
@@ -217,6 +225,8 @@ class Scene:
                 #         self.player.position.z = box.max_z + padding
                 #     print("one")
                 #     continue
+
+                # Collision at corners
 
                 center_dist = self.player.position.add(Vector(padding, padding, padding)).sub(collided_object.position)
 
@@ -305,5 +315,8 @@ class Scene:
                 if minimum == 5:
                     self.player.position.z = box.max_z + padding
 
+        # Ground
         if self.player.position.z < 0:
             self.player.position.z = 0
+
+

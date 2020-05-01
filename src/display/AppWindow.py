@@ -1,6 +1,8 @@
 import math
 
 # from pyglet.gl import *
+import threading
+
 import pyglet
 from OpenGL.GL import *
 from pyglet import window
@@ -13,48 +15,52 @@ class AppWindow(pyglet.window.Window):
         self.renderer = renderer
         self.scene = scene
 
-        self.keys = key.KeyStateHandler()
-        self._exclusive = True
-        self.set_exclusive_mouse(self._exclusive)
+        self.set_caption("PGRF Mikeska")
 
+        # Controls
+        self._exclusive_mouse = True
+        self.set_exclusive_mouse(self._exclusive_mouse)
+
+        self.keys = key.KeyStateHandler()
         self.push_handlers(self.keys)
 
+        # Clock
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
         self.fps_display = window.FPSDisplay(self)
-        self.label = pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=scene.size[1] - 10,
-                                       color=(255, 255, 255, 255), anchor_y='top')
+
+        # Audio
         self.dirt_step = pyglet.media.StaticSource(pyglet.resource.media('jogDirt1.wav'))
 
         self.step_player = pyglet.media.Player()
         self.time_since_last_move = 0
 
     def on_draw(self):
+        # print(threading.current_thread())
+
         self.clear()
         self.renderer.display()
 
+        # Display info labels
         glDisable(GL_DEPTH_TEST)
 
-        # display labels
-
-        # fps
+        # FPS
         self.fps_display.draw()
 
-        # position
+        # Position
         pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.scene.size[1] - 10,
                           color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
 
     def toggle_exclusive(self):
         # toggles pyglet exclusive mouse mode
-
-        if not self._exclusive:
-            self._exclusive = True
-            self.set_exclusive_mouse(True)
+        if not self._exclusive_mouse:
+            self._exclusive_mouse = True
+            self.set_exclusive_mouse(self._exclusive_mouse)
         else:
-            self._exclusive = False
-            self.set_exclusive_mouse(False)
+            self._exclusive_mouse = False
+            self.set_exclusive_mouse(self._exclusive_mouse)
 
     def update(self, dt):
-        # if player moved
+        # Set to False
         moved = False
 
         if self.keys[key.W]:
@@ -88,7 +94,7 @@ class AppWindow(pyglet.window.Window):
 
     def play_step(self, player, source):
         # checks so the queue is not filled after every update when moving,
-        # queues sound only if tehre isnt one already playing
+        # queues sound only if there isn't one already playing
 
         player.play()
         if not player.source:
@@ -109,22 +115,14 @@ class AppWindow(pyglet.window.Window):
             self.scene.render_distance -= 1
         if symbol == key.U:
             self.scene.toggle_fog_mode()
-        # if symbol == key.W:
-        #     self.scene.camera.move_forward(self.scene.camera_speed)
-        # if symbol == key.S:
-        #     self.scene.camera.move_backward(self.scene.camera_speed)
-        # if symbol == key.A:
-        #     self.scene.camera.move_left(self.scene.camera_speed)
-        # if symbol == key.D:
-        #     self.scene.camera.move_right(self.scene.camera_speed)
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.scene.player.add_azimuth((math.radians(0.1) * (-dx)))
-        self.scene.player.add_zenith((math.radians(0.1) * (dy)))
+        if self._exclusive_mouse:
+            self.scene.player.add_azimuth((math.radians(0.1) * (-dx)))
+            self.scene.player.add_zenith((math.radians(0.1) * (dy)))
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         if buttons == mouse.LEFT:
-            self.scene.player.add_azimuth((math.radians(0.3) * (self.scene.cam_x - x)))
-            self.scene.player.add_zenith((math.radians(0.3) * (self.scene.cam_y - y)))
-            self.scene.cam_x = x
-            self.scene.cam_y = y
+            if not self._exclusive_mouse:
+                self.scene.player.add_azimuth((math.radians(0.1) * (dx)))
+                self.scene.player.add_zenith((math.radians(0.1) * (dy)))

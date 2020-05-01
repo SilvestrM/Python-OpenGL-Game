@@ -1,15 +1,13 @@
 import ctypes
 
-import numpy
-import pyglet
 
+import pyglet
 from OpenGL.GL import *
 
 # from pyglet.gl import *
 
 from model.Collidable import Collidable
 from model.Vector import Vector
-from utils.Utils import load_texture
 
 
 class Solid:
@@ -26,7 +24,6 @@ class Solid:
         self.batch = pyglet.graphics.Batch()
         self.color = color
         self.texture = texture
-        # self.texture = load_texture(texture)
         # print("Generating solid..." + str(self))
 
     def set_position(self, translate: Vector, rotate_angle=0, rotate=Vector(0.0, 0.0, 0.0),
@@ -58,5 +55,6 @@ class Solid:
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)
         self.texture.set_state()
+
         self.batch.draw()
         glDisable(GL_TEXTURE_2D)
