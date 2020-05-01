@@ -147,7 +147,7 @@ class Scene:
                 print("sec")
 
                 # Collision at corners
-                center_dist = self.player.position.add(Vector(padding, padding, padding)).sub(collided_object.position)
+                center_dist = self.player.position.sub(collided_object.position)
 
                 dist_min_x = math.fabs(self.player.position.x + padding - box.min_x)
                 dist_max_x = math.fabs(self.player.position.x - padding - box.max_x)
