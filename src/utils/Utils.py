@@ -130,8 +130,3 @@ def distance(vec1: Vector, vec2: Vector):
         (vec1.y - vec2.y) ** 2 +
         (vec1.z - vec2.z) ** 2)
 
-
-def get_collision_dir(point, box):
-    if box.min_x <= point.x <= box.max_x: return "x"
-    if box.min_y <= point.y <= box.max_y: return "y"
-    if box.min_z <= point.z <= box.max_z: return "z"

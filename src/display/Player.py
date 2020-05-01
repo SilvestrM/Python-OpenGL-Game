@@ -10,6 +10,8 @@ class Player(Camera):
         self.min_x, self.min_y, self.min_z = self.position.x - 0.5, self.position.y - 0.5, self.position.z - 0.5
         self.max_x, self.max_y, self.max_z = self.min_x + 1, self.min_y + 1, self.min_z + 1
 
+        self.speed = 3
+
         self.padding = 0.25
         self.acc = 0
         self.mass = mass

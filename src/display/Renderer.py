@@ -1,7 +1,5 @@
 import os
 
-import multiprocessing as mp
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -68,10 +66,6 @@ class Renderer:
         glPopMatrix()
         glShadeModel(GL_SMOOTH)
 
-        # with mp.Pool(2) as executor:
-        #     for solid in executor.map(self.render, self.scene.solids):
-        #         print(solid)
-
         for solid in self.scene.solids:
             self.render(solid)
 
@@ -100,7 +94,6 @@ class Renderer:
         # glPopMatrix()
 
     def render(self, solid: Solid):
-        print("Executing our Task on Process {}".format(os.getpid()))
         glMatrixMode(GL_MODELVIEW)
         glPushMatrix()
         # camera
