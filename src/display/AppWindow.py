@@ -21,18 +21,18 @@ class AppWindow(pyglet.window.Window):
         self._exclusive_mouse = True
         self.set_exclusive_mouse(self._exclusive_mouse)
 
-        self.keys = key.KeyStateHandler()
-        self.push_handlers(self.keys)
+        self._keys = key.KeyStateHandler()
+        self.push_handlers(self._keys)
 
         # Clock
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
-        self.fps_display = window.FPSDisplay(self)
+        self._fps_display = window.FPSDisplay(self)
 
         # Audio
-        self.dirt_step = pyglet.media.StaticSource(pyglet.resource.media('jogDirt1.wav'))
+        self._dirt_step = pyglet.media.StaticSource(pyglet.resource.media('jogDirt1.wav'))
 
-        self.step_player = pyglet.media.Player()
-        self.time_since_last_move = 0
+        self._step_player = pyglet.media.Player()
+        self._time_since_last_move = 0
 
     def on_draw(self):
         self.clear()
@@ -42,22 +42,29 @@ class AppWindow(pyglet.window.Window):
         glDisable(GL_DEPTH_TEST)
 
         # FPS
-        self.fps_display.draw()
+        self._fps_display.draw()
 
         # Position
         pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.scene.size[1] - 10,
-                          color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Collided objects: " + str(self.scene.collided_number), x=10, y=self.scene.size[1] - 30,
-                          color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Exclusive mouse mode U : " + ("on" if self._exclusive_mouse else "off"), x=10,
                           y=self.scene.size[1] - 50,
-                          color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Fog mode O : " + ("Dense" if self.scene.fog_mode == 1 else "Clear"), x=10,
                           y=self.scene.size[1] - 70,
-                          color=(255, 255, 255, 255), anchor_y='top', bold=True).draw()
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
+
+        pyglet.text.Label("Crouch C : " + str(self.scene.player.is_crouching), x=10,
+                          y=self.scene.size[1] - 90,
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
+        pyglet.text.Label("Toggle AA I : " + str(self.renderer.antialiasing), x=10,
+                          y=self.scene.size[1] - 110,
+                          color=(255, 255, 255, 255), anchor_y='top').draw()
 
     def toggle_exclusive(self):
         # toggles pyglet exclusive mouse mode
@@ -72,31 +79,31 @@ class AppWindow(pyglet.window.Window):
         # Set to False
         moved = False
 
-        if self.keys[key.W]:
-            self.play_step(self.step_player, self.dirt_step)
+        if self._keys[key.W]:
+            self.play_step(self._step_player, self._dirt_step)
             self.scene.player.move_forward(dt * self.scene.player.speed)
             moved = True
-        if self.keys[key.S]:
-            self.play_step(self.step_player, self.dirt_step)
+        if self._keys[key.S]:
+            self.play_step(self._step_player, self._dirt_step)
             self.scene.player.move_backward(dt * self.scene.player.speed)
             moved = True
-        if self.keys[key.A]:
-            self.play_step(self.step_player, self.dirt_step)
+        if self._keys[key.A]:
+            self.play_step(self._step_player, self._dirt_step)
             self.scene.player.move_left(dt * self.scene.player.speed)
             moved = True
-        if self.keys[key.D]:
-            self.play_step(self.step_player, self.dirt_step)
+        if self._keys[key.D]:
+            self.play_step(self._step_player, self._dirt_step)
             self.scene.player.move_right(dt * self.scene.player.speed)
             moved = True
 
         # soft sound cut
         # so the steps are not cut instantly after the player stops moving
         if not moved:
-            self.time_since_last_move += dt
-            if self.time_since_last_move > 0.2:
-                self.step_player.pause()
+            self._time_since_last_move += dt
+            if self._time_since_last_move > 0.2:
+                self._step_player.pause()
         else:
-            self.time_since_last_move = 0
+            self._time_since_last_move = 0
 
         # update the scene
         self.scene.update(dt, moved)
@@ -126,6 +133,8 @@ class AppWindow(pyglet.window.Window):
             self.scene.toggle_fog_mode()
         if symbol == key.C:
             self.scene.player.crouch()
+        if symbol == key.I:
+            self.renderer.toggle_aa()
 
     def on_mouse_motion(self, x, y, dx, dy):
         if self._exclusive_mouse:

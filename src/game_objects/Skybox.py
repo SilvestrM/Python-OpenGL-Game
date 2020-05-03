@@ -17,15 +17,12 @@ class Skybox:
     def __init__(self, texture):
         self.rotation = 0
         self.batch = pyglet.graphics.Batch()
-        # texture_map = load_cubemap_texture("skybox2.jpg")
         self.texture_id = load_cubemap_texture("sbx_2")
-        # self.textures = texture_map
-        # glBindTexture(GL_TEXTURE_CUBE_MAP, glGenTextures(1))
-        # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        texture_coords = ('t2f', (0, 0, 1, 0, 1, 1, 0, 1))
+
         size = 50
         normals = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (-1, 0, 0), (0, -1, 0), (0, 0, -1)]
-        color = (('c3f'), (0.93, 0.89, 0.57) * 4)
+
+        color = ('c3f', (0.93, 0.89, 0.57) * 4)
 
         self.bottom = pyglet.graphics.Batch() \
             .add(4, GL_QUADS, None,
@@ -124,13 +121,6 @@ class Skybox:
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE)
         glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_ADD_SIGNED)
-        # glTexGenfv(GL_S, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP)
-        # glTexGenfv(GL_T, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP)
-        # glTexGenfv(GL_R, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP)
-        # glEnable(GL_TEXTURE_GEN_S)
-        # glEnable(GL_TEXTURE_GEN_T)
-        # glEnable(GL_TEXTURE_GEN_R)
-        # glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, GL_SRC_COLOR)
 
         glMatrixMode(GL_TEXTURE)
 
@@ -170,9 +160,6 @@ class Skybox:
         self.front.draw(GL_QUADS)
         glPopMatrix()
 
-        self.batch.draw()
-        # glDisable(GL_TEXTURE_GEN_S)
-        # glDisable(GL_TEXTURE_GEN_T)
-        # glDisable(GL_TEXTURE_GEN_R)
+        # self.batch.draw()
         glDisable(GL_TEXTURE_CUBE_MAP)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)

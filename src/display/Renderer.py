@@ -1,4 +1,3 @@
-import os
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -11,7 +10,10 @@ from model.Vector import Vector
 
 class Renderer:
     def __init__(self, scene: Scene):
+
         self.scene = scene
+        self._antialiasing = True
+
         glClearColor(0.1, 0.1, 0.1, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
@@ -19,24 +21,20 @@ class Renderer:
     def display(self):
 
         glViewport(0, 0, self.scene.size[0], self.scene.size[1])
-        glEnable(GL_MULTISAMPLE)
+        if self._antialiasing:
+            glEnable(GL_MULTISAMPLE)
+
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
-        # glEnable(GL_TEXTURE_2D)
         glDisable(GL_LIGHTING)
         # glEnable(GL_BLEND)
         # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-
-        # glMatrixMode(GL_TEXTURE)
-        # glPushMatrix()
-        # glLoadIdentity()
 
         glMatrixMode(GL_PROJECTION)
         glPushMatrix()
         glLoadIdentity()
         gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
-        # gluOrtho2D(self.scene.size[0], self.scene.size[1], 0.1, 500)
 
         glEnable(GL_FOG)
         glFogi(GL_FOG_MODE, GL_EXP2)
@@ -55,6 +53,7 @@ class Renderer:
         glDisable(GL_TEXTURE_2D)
         glEnable(GL_LINE_SMOOTH)
 
+        # Axes
         glBegin(GL_LINES)
         for i, edge in enumerate(self.scene.axes.edges):
             for vertex in edge:
@@ -106,3 +105,10 @@ class Renderer:
         solid.draw()
         glMatrixMode(GL_MODELVIEW)
         glPopMatrix()
+
+    def toggle_aa(self):
+        self._antialiasing = not self._antialiasing
+
+    @property
+    def antialiasing(self) -> bool:
+        return self._antialiasing

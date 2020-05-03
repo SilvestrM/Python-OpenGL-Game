@@ -458,3 +458,5 @@ class Initial(Level):
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
         cubeWall.set_position(Vector(2, -9, 0), scale=Vector(1, 2, 1.5))
         self.solids.append(cubeWall)
+
+        print("Done ")

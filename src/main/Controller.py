@@ -2,7 +2,6 @@ import math
 
 import pyglet
 from pyglet import *
-from OpenGL.GLU import *
 
 from display.AppWindow import AppWindow
 from display.Renderer import Renderer
@@ -21,11 +20,11 @@ class Controller:
 
         # OGL config
         config = gl.Config()
-        # config.stencil_size = 8
+        config.stencil_size = 8
         # Antialiasing
         config.sample_buffers = 1
         config.samples = 16
-        config.aux_buffers = 2
+        config.aux_buffers = 4
 
         # Level init
         level1 = Initial()
@@ -40,4 +39,5 @@ class Controller:
         self.win.set_location(500, 100)
 
         pyglet.resource.reindex()
+        print("Launching app")
         app.run()

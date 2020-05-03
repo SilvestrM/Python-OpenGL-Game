@@ -6,6 +6,7 @@ from display.Player import Player
 from game_objects.Axes import Axes
 from game_objects.Cube import Cube
 from game_objects.Panel import Panel
+from game_objects.Skybox import Skybox
 from levels.Level import Level
 from model.Collidable import Collidable
 from model.Solid import Solid
@@ -14,55 +15,54 @@ from utils import Utils
 
 
 class Scene:
-    solids = []
+    _solids: list = []
 
     def __init__(self, size: tuple, level: Level):
 
-        self.collided_number = None
-        self.render_distance = 100
+        self._collided_number = None
+        self._render_distance = 100
 
+        self._prev_collision = ''
+        self._fog_density = 0.05
+        self._fog_mode = 0
 
-
-        self.prev_collision = ''
-        self.fog_density = 0.05
-        self.fog_mode = 0
-
-        self.solids = level.solids
-        self.skybox = level.skybox
+        self._solids = level.solids
+        self._skybox = level.skybox
 
         # Ambience track
 
-        self.ambience_player = pyglet.media.Player()
-        self.ambience_player.queue(pyglet.media.StaticSource(pyglet.resource.media(level.ambience)))
-        self.ambience_player.volume = 0.5
-        self.ambience_player.loop = True
-        self.ambience_player.play()
+        self._ambience_player = pyglet.media.Player()
+        self._ambience_player.queue(pyglet.media.StaticSource(pyglet.resource.media(level.ambience)))
+        self._ambience_player.volume = 0.5
+        self._ambience_player.loop = True
+        self._ambience_player.play()
 
-        self.size = size
+        self._size = size
 
         self.player = Player(1, Vector(4, 0, 0), 0, 0, 1)
-        self.ground_zero = self.player.height / 2
+        self._ground_zero = self.player._height / 2
         self.axes = Axes()
 
     def toggle_fog_mode(self):
         if self.fog_mode == 0:
-            self.fog_mode = 1
+            self._fog_mode = 1
         else:
-            self.fog_mode = 0
+            self._fog_mode = 0
 
     def update(self, dt, moved):
         if self.fog_mode != 0:
-            self.fog_density = 0.25
+            self._fog_density = 0.25
         else:
-            self.fog_density = 0.05
+            self._fog_density = 0.05
 
         self.player.update_pos(dt)
-        self.player.update_physics(dt, self.ground_zero)
+        self.player.update_physics(dt, self._ground_zero)
+
         # Collisions logic
 
         collided_objects = []
 
-        for solid in self.solids:
+        for solid in self._solids:
             if hasattr(solid, 'bounding_box'):
                 center_dist = math.sqrt(
                     math.pow(
@@ -82,7 +82,7 @@ class Scene:
                     print("tru")
                     collided_objects.append(solid)
 
-        self.collided_number = len(collided_objects)
+        self.__collided_number = len(collided_objects)
         if len(collided_objects) > 0:
             # collided_objects.sort(key=lambda x: x.center_dist, reverse=True)
 
@@ -141,6 +141,34 @@ class Scene:
 
         # Ground
 
-        if self.player.position.z < self.ground_zero:
-            self.player.position.z = self.ground_zero
+        if self.player.position.z < self._ground_zero:
+            self.player.position.z = self._ground_zero
         self.player.update(dt)
+
+    @property
+    def collided_number(self) -> int:
+        return self.__collided_number
+
+    @property
+    def fog_mode(self) -> int:
+        return self._fog_mode
+
+    @property
+    def fog_density(self) -> float:
+        return self._fog_density
+
+    @property
+    def solids(self) -> list:
+        return self._solids
+
+    @property
+    def skybox(self) -> Skybox:
+        return self._skybox
+
+    @property
+    def size(self) -> tuple or list:
+        return self._size
+
+    @property
+    def render_distance(self) -> float:
+        return self._render_distance

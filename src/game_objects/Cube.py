@@ -8,7 +8,7 @@ from model.Vector import Vector
 import pyglet.graphics
 
 
-class Cube(Solid):
+class Cube(Solid, Collidable):
 
     def __init__(self, color: list, texture="", size=1):
         super().__init__(color, texture)
@@ -18,12 +18,7 @@ class Cube(Solid):
         colors = ('c3f', [color[0], color[1], color[2]] * 4)
         self.sizes = [size, size, size]
         self.center_dist = 0
-        self.bounding_box = BoundingBox(self.position, size, size, size)
-
-        # self.vertices = [
-        #     [size, 0, 0], [0, 0, 0], [0, size, 0], [size, size, 0], [0, 0, size], [size, 0, size], [size, size, size],
-        #     [0, size, size]]
-        # self.bounding_box = self.vertices
+        # self.bounding_box = BoundingBox(self.position, size, size, size)
 
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (size, -size, -size, -size, -size, -size, -size, size, -size, size, size, -size)),
