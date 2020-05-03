@@ -1,11 +1,22 @@
 from display.Camera import Camera
 from model.BoundingBox import BoundingBox
 from model.Collidable import Collidable
-from model.Vector import Vector
 
 
 class Player(Camera, Collidable):
     _is_crouching = False
+
+    @property
+    def speed(self) -> float:
+        return self._speed
+
+    @property
+    def height(self) -> float:
+        return self._height
+
+    @property
+    def is_crouching(self) -> bool:
+        return self._is_crouching
 
     def __init__(self, mass, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,19 +66,9 @@ class Player(Camera, Collidable):
 
     def update(self, dt):
         if self._is_crouching:
-            self.bounding_box.size_z -= self.bounding_box.size_z * 0.75
-            self.position.z -= 0.75
+            self.bounding_box.size_z -= self._height * 0.5
+            self.position.z -= 0.5
         else:
             self.bounding_box.size_z = self._height
 
-    @property
-    def speed(self) -> float:
-        return self._speed
 
-    @property
-    def height(self) -> float:
-        return self._height
-
-    @property
-    def is_crouching(self) -> bool:
-        return self._is_crouching

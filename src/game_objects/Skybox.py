@@ -14,15 +14,15 @@ def get_st(sc, tc, ma):
 class Skybox:
     # Skybox class
 
-    def __init__(self, texture):
+    def __init__(self, flavor, texture):
         self.rotation = 0
         self.batch = pyglet.graphics.Batch()
-        self.texture_id = load_cubemap_texture("sbx_2")
+        self.texture_id = load_cubemap_texture(texture)
 
         size = 50
         normals = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (-1, 0, 0), (0, -1, 0), (0, 0, -1)]
 
-        color = ('c3f', (0.93, 0.89, 0.57) * 4)
+        color = ('c4f', flavor * 4)
 
         self.bottom = pyglet.graphics.Batch() \
             .add(4, GL_QUADS, None,
@@ -106,7 +106,7 @@ class Skybox:
     def rotate(self):
         # Atmospheric slow rotation
 
-        self.rotation += 0.01
+        self.rotation += 0.05
         return self.rotation
 
     def draw(self):

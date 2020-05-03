@@ -1,10 +1,4 @@
-import math
-
-import pyglet
-import pyglet.gl
-
 from model.BoundingBox import BoundingBox
-from model.Vector import Vector
 
 
 class Collidable:

@@ -4,18 +4,46 @@ import pyglet
 
 from display.Player import Player
 from game_objects.Axes import Axes
-from game_objects.Cube import Cube
-from game_objects.Panel import Panel
 from game_objects.Skybox import Skybox
 from levels.Level import Level
-from model.Collidable import Collidable
-from model.Solid import Solid
 from model.Vector import Vector
 from utils import Utils
 
 
 class Scene:
     _solids: list = []
+
+    @property
+    def collided_number(self) -> int:
+        return self.__collided_number
+
+    @property
+    def fog_mode(self) -> int:
+        return self._fog_mode
+
+    @property
+    def fog_density(self) -> float:
+        return self._fog_density
+
+    @property
+    def solids(self) -> list:
+        return self._solids
+
+    @property
+    def skybox(self) -> Skybox:
+        return self._skybox
+
+    @property
+    def size(self) -> tuple or list:
+        return self._size
+
+    @size.setter
+    def size(self, size: tuple or list):
+        self._size = size
+
+    @property
+    def render_distance(self) -> float:
+        return self._render_distance
 
     def __init__(self, size: tuple, level: Level):
 
@@ -28,6 +56,7 @@ class Scene:
 
         self._solids = level.solids
         self._skybox = level.skybox
+        self.flavor_color = level.flavor_color
 
         # Ambience track
 
@@ -145,30 +174,4 @@ class Scene:
             self.player.position.z = self._ground_zero
         self.player.update(dt)
 
-    @property
-    def collided_number(self) -> int:
-        return self.__collided_number
 
-    @property
-    def fog_mode(self) -> int:
-        return self._fog_mode
-
-    @property
-    def fog_density(self) -> float:
-        return self._fog_density
-
-    @property
-    def solids(self) -> list:
-        return self._solids
-
-    @property
-    def skybox(self) -> Skybox:
-        return self._skybox
-
-    @property
-    def size(self) -> tuple or list:
-        return self._size
-
-    @property
-    def render_distance(self) -> float:
-        return self._render_distance

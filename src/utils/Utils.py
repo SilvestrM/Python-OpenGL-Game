@@ -1,6 +1,7 @@
 import math
+import os
+import sys
 
-import sys, os
 import pyglet
 from OpenGL.GL import *
 
@@ -13,7 +14,7 @@ def resource_path(relative):
     return os.path.join(os.path.abspath("."), relative)
 
 
-def load_texture(file, cube=False):
+def load_texture(file):
     if file:
         # image = pyglet.image.load(resource_path('../resources/' + file))
         image = pyglet.resource.image(file).get_image_data()
@@ -51,14 +52,10 @@ def Log2(x):
 
 
 def load_cubemap_texture(file):
-    texture = None
+
     glEnable(GL_TEXTURE_CUBE_MAP)
     tex_id = glGenTextures(1)
     # image = pyglet.image.load('../resources/' + file)
-    # temporary solution
-
-    # tex_width = round(image.width/4)
-    # tex_height = round(image.height/3)
 
     # tex_bottom = pyglet.image.load('../resources/skybox/' + file + '-bottom.jpg').get_image_data()
     # tex_top = pyglet.image.load('../resources/skybox/' + file + '-top.jpg').get_image_data()
@@ -99,12 +96,6 @@ def load_cubemap_texture(file):
                  tex_front.get_data())
     glGenerateMipmap(GL_TEXTURE_CUBE_MAP)
 
-    # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-    # glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-    # glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
-    # glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-    # glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-    # glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD)
     return tex_id
 
 
@@ -130,3 +121,11 @@ def distance(vec1: Vector, vec2: Vector):
         (vec1.y - vec2.y) ** 2 +
         (vec1.z - vec2.z) ** 2)
 
+
+def play_step(player, source):
+    # checks so the queue is not filled after every update when moving,
+    # queues sound only if there isn't one already playing
+
+    player.play()
+    if not player.source:
+        player.queue(source)

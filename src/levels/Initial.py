@@ -15,8 +15,8 @@ class Initial(Level):
         texture_rock = load_texture('rockWall1.jpg')
 
         self.ambience = 'desertambientl.wav'
-
-        self.skybox = Skybox("skybox1.png")
+        self.flavor_color = [0.93, 0.89, 0.57, 0.1]
+        self.skybox = Skybox(self.flavor_color, "sbx_2")
 
         self.solids = []
 

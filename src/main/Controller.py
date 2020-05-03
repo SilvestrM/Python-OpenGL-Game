@@ -1,5 +1,3 @@
-import math
-
 import pyglet
 from pyglet import *
 
@@ -16,7 +14,7 @@ class Controller:
 
         self.win_size = (1280, 920)
 
-        options['debug_graphics_batch'] = True
+        # options['debug_graphics_batch'] = True
 
         # OGL config
         config = gl.Config()
@@ -33,10 +31,9 @@ class Controller:
         self.scene = Scene(self.win_size, level1)
         self.renderer = Renderer(self.scene)
 
+        screen = pyglet.canvas.get_display().get_screens()
         # Window
-        self.win = AppWindow(self.renderer, self.scene, config=config)
-        self.win.set_size(self.win_size[0], self.win_size[1])
-        self.win.set_location(500, 100)
+        self.win = AppWindow(self.renderer, self.scene, width=self.win_size[0], height=self.win_size[1], config=config)
 
         pyglet.resource.reindex()
         print("Launching app")

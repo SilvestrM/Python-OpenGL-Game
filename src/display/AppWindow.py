@@ -1,12 +1,14 @@
 import math
 
-# from pyglet.gl import *
-import threading
-
 import pyglet
 from OpenGL.GL import *
 from pyglet import window
 from pyglet.window import key, mouse
+
+from utils.Utils import play_step
+
+
+# from pyglet.gl import *
 
 
 class AppWindow(pyglet.window.Window):
@@ -16,6 +18,7 @@ class AppWindow(pyglet.window.Window):
         self.scene = scene
 
         self.set_caption("PGRF Mikeska")
+        self.set_location(int((self.screen.width-self.width)/2), int((self.screen.height-self.height)/2))
 
         # Controls
         self._exclusive_mouse = True
@@ -34,6 +37,11 @@ class AppWindow(pyglet.window.Window):
         self._step_player = pyglet.media.Player()
         self._time_since_last_move = 0
 
+    # def on_resize(self, width, height):
+    #     print("win" + str(width) + " : scene" + str(self.scene.size[0]))
+    #     self.scene.size = (width, height)
+    #     print("win2" + str(width) + " : scene" + str(self.scene.size[0]))
+
     def on_draw(self):
         self.clear()
         self.renderer.display()
@@ -45,25 +53,25 @@ class AppWindow(pyglet.window.Window):
         self._fps_display.draw()
 
         # Position
-        pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.scene.size[1] - 10,
+        pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.height - 10,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
 
-        pyglet.text.Label("Collided objects: " + str(self.scene.collided_number), x=10, y=self.scene.size[1] - 30,
+        pyglet.text.Label("Collided objects: " + str(self.scene.collided_number), x=10, y=self.height - 30,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Exclusive mouse mode U : " + ("on" if self._exclusive_mouse else "off"), x=10,
-                          y=self.scene.size[1] - 50,
+                          y=self.height - 50,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Fog mode O : " + ("Dense" if self.scene.fog_mode == 1 else "Clear"), x=10,
-                          y=self.scene.size[1] - 70,
+                          y=self.height - 70,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
 
         pyglet.text.Label("Crouch C : " + str(self.scene.player.is_crouching), x=10,
-                          y=self.scene.size[1] - 90,
+                          y=self.height - 90,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
         pyglet.text.Label("Toggle AA I : " + str(self.renderer.antialiasing), x=10,
-                          y=self.scene.size[1] - 110,
+                          y=self.height - 110,
                           color=(255, 255, 255, 255), anchor_y='top').draw()
 
     def toggle_exclusive(self):
@@ -80,19 +88,19 @@ class AppWindow(pyglet.window.Window):
         moved = False
 
         if self._keys[key.W]:
-            self.play_step(self._step_player, self._dirt_step)
+            play_step(self._step_player, self._dirt_step)
             self.scene.player.move_forward(dt * self.scene.player.speed)
             moved = True
         if self._keys[key.S]:
-            self.play_step(self._step_player, self._dirt_step)
+            play_step(self._step_player, self._dirt_step)
             self.scene.player.move_backward(dt * self.scene.player.speed)
             moved = True
         if self._keys[key.A]:
-            self.play_step(self._step_player, self._dirt_step)
+            play_step(self._step_player, self._dirt_step)
             self.scene.player.move_left(dt * self.scene.player.speed)
             moved = True
         if self._keys[key.D]:
-            self.play_step(self._step_player, self._dirt_step)
+            play_step(self._step_player, self._dirt_step)
             self.scene.player.move_right(dt * self.scene.player.speed)
             moved = True
 
@@ -107,14 +115,6 @@ class AppWindow(pyglet.window.Window):
 
         # update the scene
         self.scene.update(dt, moved)
-
-    def play_step(self, player, source):
-        # checks so the queue is not filled after every update when moving,
-        # queues sound only if there isn't one already playing
-
-        player.play()
-        if not player.source:
-            player.queue(source)
 
     def on_key_press(self, symbol, modifiers):
         # Key listeners not based on FPS
@@ -135,6 +135,9 @@ class AppWindow(pyglet.window.Window):
             self.scene.player.crouch()
         if symbol == key.I:
             self.renderer.toggle_aa()
+        if symbol == key.T:
+            self.set_fullscreen(not self.fullscreen)
+            self.scene.size = (self.width, self.height)
 
     def on_mouse_motion(self, x, y, dx, dy):
         if self._exclusive_mouse:

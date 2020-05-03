@@ -1,7 +1,5 @@
 from OpenGL.GL import *
 
-from model.BoundingBox import BoundingBox
-from model.Collidable import Collidable
 from model.Solid import Solid
 from model.Vector import Vector
 
@@ -10,12 +8,11 @@ class Panel(Solid):
     def __init__(self, color, texture="", size=1):
         super().__init__(color, texture)
         texture_coords = ('t2f', (0, 0, 1, 0, 1, 1, 0, 1))
-        # self.bounding_box = BoundingBox(self.position, size, size, 0.01)
 
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (-size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size)),
                        ('n3f', (0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1)),
-                       texture_coords)  # front
+                       texture_coords)  # top
         self.batch.add(4, GL_QUADS, self.texture,
                        ('v3f', (size, -size, -size, -size, -size, -size, -size, size, -size, size, size, -size)),
                        ('n3f', (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)),

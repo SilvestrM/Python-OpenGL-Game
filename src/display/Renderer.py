@@ -1,4 +1,3 @@
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -9,6 +8,10 @@ from model.Vector import Vector
 
 
 class Renderer:
+    @property
+    def antialiasing(self) -> bool:
+        return self._antialiasing
+
     def __init__(self, scene: Scene):
 
         self.scene = scene
@@ -28,20 +31,19 @@ class Renderer:
         glEnable(GL_CULL_FACE)
 
         glDisable(GL_LIGHTING)
-        # glEnable(GL_BLEND)
-        # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         glMatrixMode(GL_PROJECTION)
         glPushMatrix()
         glLoadIdentity()
         gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
 
+        # Fog
         glEnable(GL_FOG)
         glFogi(GL_FOG_MODE, GL_EXP2)
         glFogi(GL_FOG_START, 6)
         glFogi(GL_FOG_END, 12)
         glFogf(GL_FOG_DENSITY, self.scene.fog_density)
-        glFogfv(GL_FOG_COLOR, [0.93, 0.89, 0.57, 0.1])
+        glFogfv(GL_FOG_COLOR, self.scene.flavor_color)
 
         # cam
         glMatrixMode(GL_MODELVIEW)
@@ -82,15 +84,8 @@ class Renderer:
         glMatrixMode(GL_MODELVIEW)
         glPopMatrix()
 
-        glDepthMask(GL_TRUE)
-
-        # cam
-        # glMatrixMode(GL_MODELVIEW)
-        # glPopMatrix()
         glMatrixMode(GL_PROJECTION)
         glPopMatrix()
-        # glMatrixMode(GL_TEXTURE)
-        # glPopMatrix()
 
     def render(self, solid: Solid):
         glMatrixMode(GL_MODELVIEW)
@@ -108,7 +103,3 @@ class Renderer:
 
     def toggle_aa(self):
         self._antialiasing = not self._antialiasing
-
-    @property
-    def antialiasing(self) -> bool:
-        return self._antialiasing
