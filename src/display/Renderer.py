@@ -35,7 +35,7 @@ class Renderer:
         glMatrixMode(GL_PROJECTION)
         glPushMatrix()
         glLoadIdentity()
-        gluPerspective(60, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
+        gluPerspective(self.scene.player.FOV, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
 
         # Fog
         glEnable(GL_FOG)

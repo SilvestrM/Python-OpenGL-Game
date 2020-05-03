@@ -22,4 +22,4 @@ class Panel(Solid):
                      scale=Vector(1.0, 1.0, 1.0)):
         super().set_position(translate, rotate_angle, rotate, scale)
 
-        # self.bounding_box = BoundingBox(self.position, self.sizes[0], self.sizes[1], 0.01)
+        # self.bounding_box = BoundingBox(self.position, self.sizes[0], self.sizes[1], 0.05)

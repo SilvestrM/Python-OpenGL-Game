@@ -15,7 +15,7 @@ class Scene:
 
     @property
     def collided_number(self) -> int:
-        return self.__collided_number
+        return self._collided_number
 
     @property
     def fog_mode(self) -> int:
@@ -24,6 +24,10 @@ class Scene:
     @property
     def fog_density(self) -> float:
         return self._fog_density
+
+    @property
+    def gravity(self) -> bool:
+        return self._gravity
 
     @property
     def solids(self) -> list:
@@ -52,11 +56,13 @@ class Scene:
 
         self._prev_collision = ''
         self._fog_density = 0.05
-        self._fog_mode = 0
+        self._fog_mode = 1
 
         self._solids = level.solids
         self._skybox = level.skybox
         self.flavor_color = level.flavor_color
+
+        self._gravity = True
 
         # Ambience track
 
@@ -68,8 +74,8 @@ class Scene:
 
         self._size = size
 
-        self.player = Player(1, Vector(4, 0, 0), 0, 0, 1)
-        self._ground_zero = self.player._height / 2
+        self.player = Player(1, Vector(4, 0, 1), 60, 0, 1)
+        self._ground_zero = self.player.height / 2
         self.axes = Axes()
 
     def toggle_fog_mode(self):
@@ -78,6 +84,9 @@ class Scene:
         else:
             self._fog_mode = 0
 
+    def toggle_gravity(self):
+        self._gravity = not self._gravity
+
     def update(self, dt, moved):
         if self.fog_mode != 0:
             self._fog_density = 0.25
@@ -85,7 +94,8 @@ class Scene:
             self._fog_density = 0.05
 
         self.player.update_pos(dt)
-        self.player.update_physics(dt, self._ground_zero)
+        if self.gravity:
+            self.player.update_physics(dt, self._ground_zero)
 
         # Collisions logic
 
@@ -108,10 +118,10 @@ class Scene:
                 # collides = Utils.collides_point(self.player.position, solid.bounding_box, padding)
 
                 if collides:
-                    print("tru")
+                    # print("tru")
                     collided_objects.append(solid)
 
-        self.__collided_number = len(collided_objects)
+        self._collided_number = len(collided_objects)
         if len(collided_objects) > 0:
             # collided_objects.sort(key=lambda x: x.center_dist, reverse=True)
 
@@ -136,17 +146,17 @@ class Scene:
                              dist_min_y - math.fabs(center_dist.y), dist_max_y - math.fabs(center_dist.y),
                              dist_min_z - math.fabs(center_dist.z), dist_max_z - math.fabs(center_dist.z)]
 
-                print("nX", dist_min_x, "- adjusted ", distances[0])
-                print("xX", dist_max_x, "- adjusted ", distances[1])
-                print("nY", dist_min_y, "- adjusted ", distances[2])
-                print("xY", dist_max_y, "- adjusted ", distances[3])
-                print("nZ", dist_min_z, "- adjusted ", distances[4])
-                print("xZ", dist_max_z, "- adjusted ", distances[5])
-                print("center", center_dist.to_string())
+                # print("nX", dist_min_x, "- adjusted ", distances[0])
+                # print("xX", dist_max_x, "- adjusted ", distances[1])
+                # print("nY", dist_min_y, "- adjusted ", distances[2])
+                # print("xY", dist_max_y, "- adjusted ", distances[3])
+                # print("nZ", dist_min_z, "- adjusted ", distances[4])
+                # print("xZ", dist_max_z, "- adjusted ", distances[5])
+                # print("center", center_dist.to_string())
 
                 minimum = min(range(len(distances)), key=distances.__getitem__)
 
-                print("min", minimum)
+                # print("min", minimum)
 
                 # works best
                 # mai x
@@ -169,9 +179,6 @@ class Scene:
                     self.player.position.z = box.max_z + player.size_z
 
         # Ground
-
         if self.player.position.z < self._ground_zero:
             self.player.position.z = self._ground_zero
         self.player.update(dt)
-
-

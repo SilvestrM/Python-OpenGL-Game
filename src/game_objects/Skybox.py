@@ -21,10 +21,9 @@ class Skybox:
 
         size = 50
         normals = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (-1, 0, 0), (0, -1, 0), (0, 0, -1)]
-
         color = ('c4f', flavor * 4)
 
-        self.bottom = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      -size, -size, -size, size, -size, -size, size, size, -size, -size,
@@ -36,7 +35,7 @@ class Skybox:
                           -1, -1, -1,
                           1, -1, -1)))
         # bottom
-        self.top = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      -size, -size, size, size, -size, size, size, size, size, -size, size,
@@ -48,7 +47,7 @@ class Skybox:
                           1, 1, 1,
                           -1, 1, 1)))
         # top
-        self.left = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      -size, -size, -size, -size, size, -size, -size, size, size, -size,
@@ -60,7 +59,7 @@ class Skybox:
                           -1, -1, 1,
                           -1, -1, -1,)))
         # left
-        self.right = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      size, -size, -size, size, size, -size, size, size, size, size,
@@ -74,7 +73,7 @@ class Skybox:
                           1, -1, -1,
                           )))
         # right
-        self.back = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      -size, -size, -size, size, -size, -size, size, -size, size, -size,
@@ -88,7 +87,7 @@ class Skybox:
                      1, -1, -1,
                  )))
         # back
-        self.front = pyglet.graphics.Batch() \
+        self.batch \
             .add(4, GL_QUADS, None,
                  ('v3f', (
                      -size, size, size, size, size, size, size, size, -size, -size,
@@ -124,42 +123,42 @@ class Skybox:
 
         glMatrixMode(GL_TEXTURE)
 
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 0, 0, 1)
-        self.bottom.draw(GL_QUADS)
-        glPopMatrix()
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 0, 0, 1)
+        # self.bottom.draw(GL_QUADS)
+        # glPopMatrix()
+        #
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 0, 0, 1)
+        # self.top.draw(GL_QUADS)
+        # glPopMatrix()
+        #
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 1, 0, 0)
+        # self.left.draw(GL_QUADS)
+        # glPopMatrix()
+        #
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 1, 0, 0)
+        # self.right.draw(GL_QUADS)
+        # glPopMatrix()
+        #
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 0, 1, 0)
+        # self.back.draw(GL_QUADS)
+        # glPopMatrix()
+        #
+        # glPushMatrix()
+        # glLoadIdentity()
+        # glRotatef(0, 0, 1, 0)
+        # self.front.draw(GL_QUADS)
+        # glPopMatrix()
 
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 0, 0, 1)
-        self.top.draw(GL_QUADS)
-        glPopMatrix()
-
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 1, 0, 0)
-        self.left.draw(GL_QUADS)
-        glPopMatrix()
-
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 1, 0, 0)
-        self.right.draw(GL_QUADS)
-        glPopMatrix()
-
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 0, 1, 0)
-        self.back.draw(GL_QUADS)
-        glPopMatrix()
-
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(0, 0, 1, 0)
-        self.front.draw(GL_QUADS)
-        glPopMatrix()
-
-        # self.batch.draw()
+        self.batch.draw()
         glDisable(GL_TEXTURE_CUBE_MAP)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE)

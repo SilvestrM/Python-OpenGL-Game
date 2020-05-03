@@ -8,9 +8,6 @@ from pyglet.window import key, mouse
 from utils.Utils import play_step
 
 
-# from pyglet.gl import *
-
-
 class AppWindow(pyglet.window.Window):
     def __init__(self, renderer, scene, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,7 +15,9 @@ class AppWindow(pyglet.window.Window):
         self.scene = scene
 
         self.set_caption("PGRF Mikeska")
-        self.set_location(int((self.screen.width-self.width)/2), int((self.screen.height-self.height)/2))
+        self.set_location(int((self.screen.width - self.width) / 2), int((self.screen.height - self.height) / 2))
+
+        self._font_size = 10
 
         # Controls
         self._exclusive_mouse = True
@@ -37,11 +36,6 @@ class AppWindow(pyglet.window.Window):
         self._step_player = pyglet.media.Player()
         self._time_since_last_move = 0
 
-    # def on_resize(self, width, height):
-    #     print("win" + str(width) + " : scene" + str(self.scene.size[0]))
-    #     self.scene.size = (width, height)
-    #     print("win2" + str(width) + " : scene" + str(self.scene.size[0]))
-
     def on_draw(self):
         self.clear()
         self.renderer.display()
@@ -54,25 +48,36 @@ class AppWindow(pyglet.window.Window):
 
         # Position
         pyglet.text.Label(self.scene.player.position.to_string(), x=10, y=self.height - 10,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
-
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
         pyglet.text.Label("Collided objects: " + str(self.scene.collided_number), x=10, y=self.height - 30,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
-
-        pyglet.text.Label("Exclusive mouse mode U : " + ("on" if self._exclusive_mouse else "off"), x=10,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Exclusive mouse mode - (U) : " + ("on" if self._exclusive_mouse else "off"), x=10,
                           y=self.height - 50,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
-
-        pyglet.text.Label("Fog mode O : " + ("Dense" if self.scene.fog_mode == 1 else "Clear"), x=10,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Change FOV - (K- L+) : " + str(self.scene.player.FOV), x=10,
                           y=self.height - 70,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
-
-        pyglet.text.Label("Crouch C : " + str(self.scene.player.is_crouching), x=10,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Fog mode - (O) : " + ("Dense" if self.scene.fog_mode == 1 else "Clear"), x=10,
                           y=self.height - 90,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
-        pyglet.text.Label("Toggle AA I : " + str(self.renderer.antialiasing), x=10,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Crouch - (C) : " + str(self.scene.player.is_crouching), x=10,
                           y=self.height - 110,
-                          color=(255, 255, 255, 255), anchor_y='top').draw()
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Jump - (SPACE) : " + str(self.scene.player.is_jumping), x=10,
+                          y=self.height - 130,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Movement - (WASD)", x=10,
+                          y=self.height - 150,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Toggle AA - (I) : " + str(self.renderer.antialiasing), x=10,
+                          y=self.height - 170,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Toggle Gravity - (P) : " + str(self.scene.gravity), x=10,
+                          y=self.height - 190,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Toggle Fullscreen - (T) : " + str(self.fullscreen), x=10,
+                          y=self.height - 210,
+                          color=(255, 255, 255, 255), anchor_y='top', font_size=self._font_size).draw()
 
     def toggle_exclusive(self):
         # toggles pyglet exclusive mouse mode
@@ -104,7 +109,14 @@ class AppWindow(pyglet.window.Window):
             self.scene.player.move_right(dt * self.scene.player.speed)
             moved = True
 
-        # soft sound cut
+        if self._keys[key.L]:
+            if self.scene.player.FOV < 120:
+                self.scene.player.FOV += 1
+        if self._keys[key.K]:
+            if self.scene.player.FOV > 30:
+                self.scene.player.FOV -= 1
+
+                # soft sound cut
         # so the steps are not cut instantly after the player stops moving
         if not moved:
             self._time_since_last_move += dt
@@ -138,6 +150,8 @@ class AppWindow(pyglet.window.Window):
         if symbol == key.T:
             self.set_fullscreen(not self.fullscreen)
             self.scene.size = (self.width, self.height)
+        if symbol == key.P:
+            self.scene.toggle_gravity()
 
     def on_mouse_motion(self, x, y, dx, dy):
         if self._exclusive_mouse:

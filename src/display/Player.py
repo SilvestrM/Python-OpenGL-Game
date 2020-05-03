@@ -11,6 +11,14 @@ class Player(Camera, Collidable):
         return self._speed
 
     @property
+    def FOV(self) -> float:
+        return self._FOV
+
+    @FOV.setter
+    def FOV(self, ang: float):
+        self._FOV = ang
+
+    @property
     def height(self) -> float:
         return self._height
 
@@ -18,18 +26,23 @@ class Player(Camera, Collidable):
     def is_crouching(self) -> bool:
         return self._is_crouching
 
+    @property
+    def is_jumping(self) -> bool:
+        return self._is_jumping
+
     def __init__(self, mass, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._height = 0.5
         self.bounding_box = BoundingBox(self.position, 0.4, 0.4, self._height)
         self._speed = 3
+        self._FOV = 60
 
         self._acc = 0
         self._mass = mass
         self._is_jumping = False
         self._G_constant = 1
         self._r = self.position.z - 0
-        self._velo = 9.8
+        self._velo = 0
 
     def jump(self):
         if not self._is_jumping:

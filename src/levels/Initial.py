@@ -29,17 +29,6 @@ class Initial(Level):
                 panel1.set_position(Vector(i, j, 0))
                 self.solids.append(panel1)
 
-        # max = 20
-        # for i in range(-max, max, 2):
-        #     for j in range(-max, max, 2):
-        #         panel1 = Panel([0.05, 0.05, 0.05], texture_dirt)
-        #         panel1.set_position(Vector(i, j, 0), 180, Vector(0, 1, 0))
-        #         self.solids.append(panel1)
-
-        # panelc = Panel([1.0, 0.5, 0], texture_ceil)
-        # panelc.set_position(Vector(0, 0, -1), 180, Vector(0, 1, 0), Vector(20,20,0))
-        # self.solids.append(panelc)
-
         wall1 = Panel([1.0, 0.5, 0], texture_stonewall)
         wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))
         self.solids.append(wall1)
@@ -214,13 +203,13 @@ class Initial(Level):
         cubeWall.set_position(Vector(-10, -12, 0))
         self.solids.append(cubeWall)
 
-        for i in range(0,6,2):
+        for i in range(0, 6, 2):
             cubeWall = Cube([0, 1.0, 0], texture_stonewall)
             cubeWall.set_position(Vector(-8 + i, -12, 0))
             self.solids.append(cubeWall)
 
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
-        cubeWall.set_position(Vector(-2, -13, 0), scale=Vector(1,0.5,1))
+        cubeWall.set_position(Vector(-2, -13, 0), scale=Vector(1, 0.5, 1))
         self.solids.append(cubeWall)
 
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
@@ -289,7 +278,7 @@ class Initial(Level):
         self.solids.append(cubeWall)
 
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
-        cubeWall.set_position(Vector(6, 2, 0.75), scale=Vector(1.5,0.9,0.5))
+        cubeWall.set_position(Vector(6, 2, 0.75), scale=Vector(1.5, 0.9, 0.5))
         self.solids.append(cubeWall)
 
         cubeWall = Cube([0, 1.0, 0], texture_stonewall)
@@ -388,8 +377,6 @@ class Initial(Level):
         cubeWall.set_position(Vector(4, -16, 0), scale=Vector(3, 2.5, 2.5))
         self.solids.append(cubeWall)
 
-
-
         for i in range(0, 20, 2):
             cubeWall = Cube([0, 1.0, 0], texture_woodenwall)
             cubeWall.set_position(Vector(18 - i, -18, 0))
@@ -415,7 +402,7 @@ class Initial(Level):
         cubeWall.set_position(Vector(-16, -13, 0), scale=Vector(2, 2.5, 1.5))
         self.solids.append(cubeWall)
 
-        for i in range(0,8,2):
+        for i in range(0, 8, 2):
             cubeWall = Cube([0, 1.0, 0], texture_rock)
             cubeWall.set_position(Vector(-20, -12 + i, 0))
             self.solids.append(cubeWall)
