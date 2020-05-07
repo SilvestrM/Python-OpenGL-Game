@@ -35,7 +35,7 @@ class Renderer:
         glMatrixMode(GL_PROJECTION)
         glPushMatrix()
         glLoadIdentity()
-        gluPerspective(self.scene.player.FOV, (self.scene.size[0] / self.scene.size[1]), 0.1, self.scene.render_distance)
+        gluPerspective(self.scene.player.FOV, (self.scene.size[0] / self.scene.size[1]), 0.1, 100)
 
         # Fog
         glEnable(GL_FOG)
@@ -68,7 +68,8 @@ class Renderer:
         glShadeModel(GL_SMOOTH)
 
         for solid in self.scene.solids:
-            self.render(solid)
+            if solid.distance <= solid.max_size + self.scene.render_distance:
+                self.render(solid)
 
         # Skybox
         glDisable(GL_FOG)

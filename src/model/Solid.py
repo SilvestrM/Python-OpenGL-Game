@@ -19,6 +19,8 @@ class Solid:
     color = []
     position = Vector(0, 0, 0)
     sizes = [1, 1, 1]
+    distance = 0
+    max_size = max(sizes)
 
     def __init__(self, color, texture):
         self.batch = pyglet.graphics.Batch()
@@ -46,6 +48,8 @@ class Solid:
         self.model = glGetFloatv(GL_MODELVIEW_MATRIX, self.model)
 
     def draw(self):
+        self.max_size = max(self.sizes)
+
         glEnable(GL_TEXTURE_2D)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)

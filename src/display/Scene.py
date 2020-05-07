@@ -49,10 +49,14 @@ class Scene:
     def render_distance(self) -> float:
         return self._render_distance
 
+    @render_distance.setter
+    def render_distance(self, dist: float):
+        self._render_distance = dist
+
     def __init__(self, size: tuple, level: Level):
 
         self._collided_number = None
-        self._render_distance = 100
+        self._render_distance = 10
 
         self._prev_collision = ''
         self._fog_density = 0.05
@@ -102,13 +106,14 @@ class Scene:
         collided_objects = []
 
         for solid in self._solids:
-            if hasattr(solid, 'bounding_box'):
-                center_dist = math.sqrt(
+            center_dist = math.sqrt(
                     math.pow(
                         self.player.position.x - solid.position.x, 2) + math.pow(
                         self.player.position.y - solid.position.y, 2) + math.pow(
                         self.player.position.z - solid.position.z, 2))
-                max_size = max(solid.sizes)
+            max_size = solid.max_size
+            solid.distance = center_dist
+            if hasattr(solid, 'bounding_box'):
 
                 # To check just solids that are close
                 if center_dist > max_size + 2:

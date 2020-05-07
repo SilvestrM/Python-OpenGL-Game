@@ -79,6 +79,9 @@ class AppWindow(pyglet.window.Window):
         pyglet.text.Label("Toggle Fullscreen - (T) : " + str(self.fullscreen), x=10,
                           y=self.height - 210,
                           color=self._font_color, anchor_y='top', font_size=self._font_size).draw()
+        pyglet.text.Label("Render Distance - (N- M+) : " + str(round(self.scene.render_distance)), x=10,
+                          y=self.height - 230,
+                          color=self._font_color, anchor_y='top', font_size=self._font_size).draw()
 
     def toggle_exclusive(self):
         # toggles pyglet exclusive mouse mode
@@ -116,6 +119,12 @@ class AppWindow(pyglet.window.Window):
         if self._keys[key.K]:
             if self.scene.player.FOV > 30:
                 self.scene.player.FOV -= 1
+        if self._keys[key.M]:
+            if self.scene.render_distance < 100:
+                self.scene.render_distance += 0.2
+        if self._keys[key.N]:
+            if self.scene.render_distance > 0:
+                self.scene.render_distance -= 0.2
 
         # soft sound cut
         # so the steps are not cut instantly after the player stops moving
@@ -138,10 +147,6 @@ class AppWindow(pyglet.window.Window):
             self.scene.player.jump()
         if symbol == key.U:
             self.toggle_exclusive()
-        if symbol == key.M:
-            self.scene.render_distance += 1
-        if symbol == key.N:
-            self.scene.render_distance -= 1
         if symbol == key.O:
             self.scene.toggle_fog_mode()
         if symbol == key.C:
