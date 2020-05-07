@@ -32,9 +32,14 @@ class Controller:
         self.scene = Scene(self.win_size, level1)
         self.renderer = Renderer(self.scene)
 
-        screen = pyglet.canvas.get_display().get_screens()
         # Window
-        self.win = AppWindow(self.renderer, self.scene, width=self.win_size[0], height=self.win_size[1], config=config)
+        screen = pyglet.canvas.get_display().get_screens()
+        configs = screen[0].get_matching_configs(config)
+        if not configs:
+            print("OGL config not supported...")
+            self.win = AppWindow(self.renderer, self.scene, width=self.win_size[0], height=self.win_size[1])
+        else:
+            self.win = AppWindow(self.renderer, self.scene, width=self.win_size[0], height=self.win_size[1], config=configs[0])
 
         pyglet.resource.reindex()
         print("Launching app")
