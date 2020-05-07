@@ -46,7 +46,7 @@ class Player(Camera, Collidable):
 
     def jump(self):
         if not self._is_jumping:
-            self._velo = 2
+            self._velo = 2.5
             self._is_jumping = True
 
     def gravity(self):
@@ -74,7 +74,7 @@ class Player(Camera, Collidable):
             self._velo -= self._mass * dt
             self.position.z += self._velo * dt
 
-        if self._velo <= self._acc:
+        if self._velo <= self._acc or self.position.z <= ground:
             self._is_jumping = False
 
     def update(self, dt):

@@ -28,6 +28,7 @@ class Controller:
         level1 = Initial()
 
         # Scene with level
+        print("Initialising scene...")
         self.scene = Scene(self.win_size, level1)
         self.renderer = Renderer(self.scene)
 

@@ -29,13 +29,6 @@ class Initial(Level):
                 panel1.set_position(Vector(i, j, 0))
                 self.solids.append(panel1)
 
-        wall1 = Panel([1.0, 0.5, 0], texture_stonewall)
-        wall1.set_position(Vector(0, 0, -2), 90, Vector(1, 0, 0))
-        self.solids.append(wall1)
-        wall1 = Panel([1.0, 0.5, 0], texture_woodenwall)
-        wall1.set_position(Vector(0, 4, 0), 90, Vector(0, 1, 0))
-        self.solids.append(wall1)
-
         # Maze
         cubeWall = Cube([0, 1.0, 0], texture_woodenwall)
         cubeWall.set_position(Vector(6, 8, 0))
@@ -446,4 +439,3 @@ class Initial(Level):
         cubeWall.set_position(Vector(2, -9, 0), scale=Vector(1, 2, 1.5))
         self.solids.append(cubeWall)
 
-        print("Done ")

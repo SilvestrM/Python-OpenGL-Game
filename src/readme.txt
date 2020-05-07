@@ -1,13 +1,18 @@
-Projekt přikládám i s virtual env. raději
-Pro fungování potřeba PyOpenGl a Pyglet, Python 3.8?
+Projekt přikládám i s intrepreterm (virtual env.) raději
+Pro spuštění je potřeba PyOpenGL, Pyglet a Python 3 (3.8)
 Okno je nastaveno na 1280x920 lze případně zmenšit ve třídě Controller
 
-Spouštěcí soubor (main) je app.py v balíčku main
+Spouštěcí soubor je app.py
 
-Ovládání pohyb WASD + myš, mezerník umožňuje případně polofunkcni skákání
+Exportovat (freeze) do exe se mi nepodařilo ani po mnoha pokusech (problém s cestami k resources), zkoušel jsem PyInstaller, cxfreeze, py2exe
+Nicméně app.py by mělo spustit aplikaci bez nutnosti editoru.
 
-Pokud by dělal problém exclusive mouse mode, stačí vypnout v AppWindow a používat případně mouse drag
+Ovládání pohyb WASD + myš, dále viz. nápověda v app
 
-Svět zatím slouží pouze k testovacím účelům, tudíž žádné funkční bludiště jsem zatím netvořil
+Zameřil jsme se tedy na reprezentaci bludiště, kolize, textury, skybox, mlhu
+Nejproblematičtější byly kolize, použil jsem jednoduchou AABB kolizi, ale vymyslet správnou reakci na ni mi přesto trvalo několik dní, 
+dále mapovaní textur na cube_map, hlavně mimo jiné díky jinému počátku souřadnic textury, a využívaní vektorů
 
-V projektu jsem zatím nechal i nepoužité třídy/metody/kod,.. které pravděpodobně později vymažu, ale mohly by se ještě hodit..
+Skype
+Silvestr Mikeska / live:ondramikeska
+ondramikeska@gmail.com
